@@ -1,7 +1,8 @@
 package housit.housit_backend.domain.room;
 
+import housit.housit_backend.dto.reponse.RoomCreateResponseDto;
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.*;
 import housit.housit_backend.domain.cleaning.CleaningTask;
 import housit.housit_backend.domain.event.Event;
 import housit.housit_backend.domain.finance.Account;
@@ -11,8 +12,11 @@ import housit.housit_backend.domain.food.Food;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Entity
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
@@ -46,4 +50,12 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Food> foods = new ArrayList<>(); // 여러 음식과의 관계
+
+    public RoomCreateResponseDto toRoomCreateResponseDto() {
+        return RoomCreateResponseDto.builder()
+                .roomId(roomId)
+                .masterMemberId(masterMemberId)
+                .build();
+    }
+
 }
