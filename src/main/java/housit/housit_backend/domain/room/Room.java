@@ -18,19 +18,20 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
-    @Id
+    @Id @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long roomId;
 
     @Column(nullable = false)
     private String roomPassword;
 
+    @Getter
     @Column(nullable = false)
     private String roomName;
 
-    @Column(nullable = false)
-    private Long masterMemberId; // 멤버를 먼저 생성하고 그 Id를 가져와서 매핑
+    private Long masterMemberId;
 
+    @Getter
     private String description;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -58,4 +59,14 @@ public class Room {
                 .build();
     }
 
+    public Boolean validatePassword(String roomPassword) {
+        if (!this.roomPassword.equals(roomPassword)) {
+            throw new IllegalArgumentException("Invalid room password.");
+        }
+        return true;
+    }
+
+    public void initializeMasterMemberRoomId(Long masterMemberId) {
+        this.masterMemberId = masterMemberId;
+    }
 }

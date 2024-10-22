@@ -1,5 +1,6 @@
 package housit.housit_backend.domain.room;
 
+import housit.housit_backend.dto.reponse.MemberDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,14 @@ public class Member {
     private MemberIcon memberIcon;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "room_id")
     private Room room;
+
+    public MemberDto toMemberDto() {
+        return MemberDto.builder()
+                .memberId(this.memberId)
+                .memberName(this.memberName)
+                .memberIcon(this.memberIcon)
+                .build();
+    }
 }

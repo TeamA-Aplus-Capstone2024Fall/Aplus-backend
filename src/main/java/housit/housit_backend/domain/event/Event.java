@@ -1,14 +1,17 @@
 package housit.housit_backend.domain.event;
 
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.*;
 import housit.housit_backend.domain.room.Room;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Builder
 @Entity
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event {
 
     @Id

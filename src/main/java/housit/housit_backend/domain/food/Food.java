@@ -1,15 +1,18 @@
 package housit.housit_backend.domain.food;
 
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.*;
 import housit.housit_backend.domain.room.Room;
 
 import java.time.LocalDate;
 
 import static jakarta.persistence.FetchType.LAZY;
 
+@Builder
 @Entity
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Food {
 
     @Id

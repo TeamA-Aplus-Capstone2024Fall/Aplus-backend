@@ -14,19 +14,15 @@ public class JpaMemberRepository implements MemberRepository {
     private final EntityManager em;
 
     @Override
-    public Member createMember(Member member) {
-        em.persist(member);
+    public Member saveMember(Member member) {
+        if (member.getMemberId() == null) em.persist(member);
+        else em.merge(member);
         return member;
     }
 
     @Override
     public Member findMemberById(Long memberId) {
-        return null;
-    }
-
-    @Override
-    public Member updateMember(Member member) {
-        return null;
+        return em.find(Member.class, memberId);
     }
 
     @Override
@@ -36,6 +32,8 @@ public class JpaMemberRepository implements MemberRepository {
 
     @Override
     public List<Member> getAllMembers(Long roomId) {
-        return List.of();
+        return em.createQuery("select m from Member m where m.room.id = :roomId", Member.class) // room의 id를 조건으로 조회
+                .setParameter("roomId", roomId)  // 파라미터 바인딩
+                .getResultList();
     }
 }

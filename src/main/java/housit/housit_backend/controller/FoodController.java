@@ -20,14 +20,14 @@ public class FoodController {
     @PostMapping("/room/{roomId}/foods")
     public Food createFood(@PathVariable("roomId") Long roomId,
                                  @RequestBody FoodSaveRequestDto foodSaveRequestDto) {
-        return new Food();
+        return null;
     }
 
     @PutMapping("/room/{roomId}/foods/{foodId}")
     public Food updateFood(@PathVariable("roomId") Long roomId,
                            @PathVariable("foodId") Long foodId,
                            @RequestBody FoodSaveRequestDto foodSaveRequestDto) {
-        return new Food();
+        return null;
     }
 
 }

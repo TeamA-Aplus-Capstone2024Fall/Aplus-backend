@@ -1,11 +1,14 @@
 package housit.housit_backend.domain.cleaning;
 
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.*;
 import housit.housit_backend.domain.room.Room;
 
+@Builder
 @Entity
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class CleaningTask {
 
     @Id

@@ -15,19 +15,19 @@ public class RoomCreateRequestDto {
     private String masterMemberPassword;
 
 
-    public Room toRoomEntity(Long masterMemberId) {
-        return Room.builder() // 모호한 메서드입니다 오류
+    public Room toRoomEntity() {
+        return Room.builder()
                 .roomName(roomName)
                 .description(description)
                 .roomPassword(roomPassword)
-                .masterMemberId(masterMemberId)
                 .build();
     }
 
-    public Member toMemberEntity() {
+    public Member toMemberEntity(Room room) {
         return Member.builder()
                 .memberName(masterMemberName)
                 .memberPassword(masterMemberPassword)
+                .room(room)
                 .build();
     }
 }
