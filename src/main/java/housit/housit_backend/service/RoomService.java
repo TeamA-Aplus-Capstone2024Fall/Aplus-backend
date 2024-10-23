@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,5 +99,16 @@ public class RoomService {
     @Transactional
     public void deleteMember(Long memberId) {
         memberRepository.deleteMember(memberId);
+    }
+
+    @Transactional
+    public MemberDto updateMember(Long memberId, String memberName, String memberPassword, MemberIcon memberIcon) {
+        Optional<Member> member = memberRepository.findMemberById(memberId);
+        if(member.isPresent()){
+            member.get().updateMember(memberName, memberPassword, memberIcon);
+            memberRepository.saveMember(member.get());
+            return member.get().toMemberDto();
+        }
+        return null;
     }
 }

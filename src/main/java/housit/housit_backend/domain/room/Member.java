@@ -44,4 +44,10 @@ public class Member {
                 .room(room)
                 .build();
     }
+
+    public void updateMember(String memberName, String memberPassword, MemberIcon memberIcon) {
+        this.memberName = memberName;
+        this.memberPassword = memberPassword;
+        this.memberIcon = memberIcon;
+    }
 }

@@ -27,14 +27,6 @@ public class RoomController {
         return roomService.createRoom(roomCreateRequestDto);
     }
 
-    @PostMapping("/room/{roomId}/member")
-    public MemberDto createMember(@PathVariable("roomId") Long roomId,
-                                  @RequestParam String memberName,
-                                  @RequestParam String memberPassword,
-                                  @RequestParam MemberIcon memberIcon) {
-        return roomService.createMember(roomId, memberName, memberPassword, memberIcon);
-    }
-
     @GetMapping("/room/{roomId}")
     public ResponseEntity<List<MemberDto>> enterRoom(@PathVariable("roomId") Long roomId, @RequestParam String roomPassword) {
         // 방 비밀번호 검증 실패 시 403 응답 반환
@@ -55,18 +47,6 @@ public class RoomController {
         }
 
         roomService.deleteRoom(roomId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @DeleteMapping("/room/{roomId}/member")
-    public ResponseEntity<Void> deleteMember(@PathVariable("roomId") Long roomId,
-                                             @RequestParam Long memberId,
-                                             @RequestParam String memberPassword) {
-        // 비밀번호 검증 실패 시 403 Forbidden 응답 반환
-        if (!roomService.validateMemberPassword(memberId, memberPassword)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        roomService.deleteMember(memberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
