@@ -1,12 +1,14 @@
 package housit.housit_backend.repository.jpa;
 
 import housit.housit_backend.domain.room.Member;
+import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,13 +23,15 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member findMemberById(Long memberId) {
-        return em.find(Member.class, memberId);
+    public Optional<Member> findMemberById(Long memberId) {
+        Member member = em.find(Member.class, memberId);
+        return Optional.ofNullable(member);
     }
 
     @Override
     public void deleteMember(Long memberId) {
-
+        Optional<Member> member = findMemberById(memberId);
+        member.ifPresent(em::remove);
     }
 
     @Override

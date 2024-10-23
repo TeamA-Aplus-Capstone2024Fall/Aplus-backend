@@ -14,7 +14,6 @@ import java.util.List;
 
 @Builder
 @Entity
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
@@ -60,10 +59,7 @@ public class Room {
     }
 
     public Boolean validatePassword(String roomPassword) {
-        if (!this.roomPassword.equals(roomPassword)) {
-            throw new IllegalArgumentException("Invalid room password.");
-        }
-        return true;
+        return this.roomPassword.equals(roomPassword);
     }
 
     public void initializeMasterMemberRoomId(Long masterMemberId) {

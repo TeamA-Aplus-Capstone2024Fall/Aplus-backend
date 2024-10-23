@@ -8,7 +8,6 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Builder
 @Entity
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
@@ -30,6 +29,19 @@ public class Member {
                 .memberId(this.memberId)
                 .memberName(this.memberName)
                 .memberIcon(this.memberIcon)
+                .build();
+    }
+
+    public Boolean validatePassword(String memberPassword) {
+        return this.memberPassword.equals(memberPassword);
+    }
+
+    public static Member createMember(String memberName, String memberPassword, MemberIcon memberIcon, Room room) {
+        return Member.builder()
+                .memberName(memberName)
+                .memberPassword(memberPassword)
+                .memberIcon(memberIcon)
+                .room(room)
                 .build();
     }
 }

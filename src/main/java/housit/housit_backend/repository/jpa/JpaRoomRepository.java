@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,14 +24,15 @@ public class JpaRoomRepository implements RoomRepository {
     }
 
     @Override
-    public Room findRoomById(Long roomId) {
-        return em.find(Room.class, roomId);
+    public Optional<Room> findRoomById(Long roomId) {
+        Room room = em.find(Room.class, roomId);
+        return Optional.ofNullable(room); // room이 null일 경우 Optional.empty()를 반환
     }
 
     @Override
     public void deleteRoom(Long roomId) {
-        Room room = findRoomById(roomId);
-        if(room != null) em.remove(room);
+        Optional<Room> room = findRoomById(roomId);
+        room.ifPresent(em::remove);
     }
 
     @Override

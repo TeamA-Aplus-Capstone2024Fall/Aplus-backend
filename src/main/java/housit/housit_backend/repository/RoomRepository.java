@@ -5,10 +5,11 @@ import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoomRepository{
     public Room saveRoom(Room room);
-    public Room findRoomById(Long roomId);
+    public Optional<Room> findRoomById(Long roomId);
     public void deleteRoom(Long roomId);
 
     public List<Room> findAllRooms(Pageable pageable);
