@@ -1,5 +1,7 @@
 package housit.housit_backend.domain.food;
 
+import housit.housit_backend.dto.reponse.FoodDto;
+import housit.housit_backend.dto.request.FoodSaveRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import housit.housit_backend.domain.room.Room;
@@ -15,7 +17,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Food {
 
-    @Id
+    @Id @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long foodId;
 
@@ -31,11 +33,38 @@ public class Food {
     private String memberName;     // 음식 주인 (Nullable)
     private Boolean isShared;      // 공유 음식 여부 (Nullable)
 
-
     @Enumerated(EnumType.STRING)
     private StorageType storageType;  // 보관 타입 (냉장, 냉동, 상온)
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "roomId")
     private Room room;
+
+    public FoodDto toFoodDto() {
+        return FoodDto.builder()
+                .foodId(foodId)
+                .foodName(foodName)
+                .createAt(createAt)
+                .expirationDate(expirationDate)
+                .minimumQuantity(minimumQuantity)
+                .quantity(quantity)
+                .amount(amount)
+                .isFavorite(isFavorite)
+                .memberName(memberName)
+                .isShared(isShared)
+                .storageType(storageType)
+                .build();
+    }
+
+    public void updateFood(FoodSaveRequestDto dto) {
+        this.foodName = dto.getFoodName();
+        this.createAt = dto.getCreateAt();
+        this.expirationDate = dto.getExpirationDate();
+        this.quantity = dto.getQuantity();
+        this.amount = dto.getAmount();
+        this.isFavorite = dto.getIsFavorite();
+        this.memberName = dto.getMemberName();
+        this.isShared = dto.getIsShared();
+        this.storageType = dto.getStorageType();
+    }
 }
