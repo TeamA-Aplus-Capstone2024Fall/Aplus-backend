@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import housit.housit_backend.domain.room.Room;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
-@Entity
+@Entity @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,15 +23,12 @@ public class CleaningTask {
 
     @Enumerated(EnumType.STRING)
     private CleaningDay cleaningDay;  // 청소 요일 (Nullable)
-
-    @Column(nullable = false)
     private Integer cleaningFrequency;  // 청소 주기 (예: 주 1회)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roomId", nullable = false)
     private Room room;
 
-    // 양방향 관계
-//    @OneToMany(mappedBy = "cleaningTask", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<CleaningTaskMember> cleaningTaskMembers = new ArrayList<>();
+    @OneToMany(mappedBy = "cleaningTask", cascade = CascadeType.ALL)
+    private List<CleaningTaskMember> cleaningTaskMembers = new ArrayList<>();
 }

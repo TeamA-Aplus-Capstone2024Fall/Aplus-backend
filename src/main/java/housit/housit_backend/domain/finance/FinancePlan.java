@@ -2,11 +2,12 @@ package housit.housit_backend.domain.finance;
 
 import jakarta.persistence.*;
 import housit.housit_backend.domain.room.Room;
+import lombok.Getter;
 
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Entity @Getter
 public class FinancePlan {
 
     @Id

@@ -1,17 +1,21 @@
 package housit.housit_backend.domain.room;
 
-import housit.housit_backend.dto.reponse.MemberDto;
+import housit.housit_backend.domain.cleaning.CleaningTaskMember;
+import housit.housit_backend.domain.event.EventMember;
+import housit.housit_backend.dto.request.MemberSaveRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Builder
-@Entity
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
-    @Getter
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
     private String memberName;
@@ -24,23 +28,21 @@ public class Member {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    public MemberDto toMemberDto() {
-        return MemberDto.builder()
-                .memberId(this.memberId)
-                .memberName(this.memberName)
-                .memberIcon(this.memberIcon)
-                .build();
-    }
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CleaningTaskMember> cleaningTaskMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<EventMember> eventMembers = new ArrayList<>();
 
     public Boolean validatePassword(String memberPassword) {
         return this.memberPassword.equals(memberPassword);
     }
 
-    public static Member createMember(String memberName, String memberPassword, MemberIcon memberIcon, Room room) {
+    public static Member createMember(MemberSaveRequestDto memberSaveRequestDto, Room room) {
         return Member.builder()
-                .memberName(memberName)
-                .memberPassword(memberPassword)
-                .memberIcon(memberIcon)
+                .memberName(memberSaveRequestDto.getMemberName())
+                .memberPassword(memberSaveRequestDto.getMemberPassword())
+                .memberIcon(memberSaveRequestDto.getMemberIcon())
                 .room(room)
                 .build();
     }

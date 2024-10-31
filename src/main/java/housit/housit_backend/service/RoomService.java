@@ -1,12 +1,12 @@
 package housit.housit_backend.service;
 
 import housit.housit_backend.domain.room.Member;
-import housit.housit_backend.domain.room.MemberIcon;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.reponse.RoomCreateResponseDto;
 import housit.housit_backend.dto.reponse.RoomDto;
-import housit.housit_backend.dto.request.RoomCreateRequestDto;
+import housit.housit_backend.dto.request.MemberSaveRequestDto;
+import housit.housit_backend.dto.request.RoomSaveRequestDto;
 import housit.housit_backend.repository.MemberRepository;
 import housit.housit_backend.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +27,11 @@ public class RoomService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public RoomCreateResponseDto createRoom(RoomCreateRequestDto roomCreateRequestDto) {
-        Room createdRoom = roomCreateRequestDto.toRoomEntity();
+    public RoomCreateResponseDto createRoom(RoomSaveRequestDto roomSaveRequestDto) {
+        Room createdRoom = roomSaveRequestDto.toRoomEntity();
         roomRepository.saveRoom(createdRoom);
 
-        Member masterMember = roomCreateRequestDto.toMemberEntity(createdRoom);
+        Member masterMember = roomSaveRequestDto.toMemberEntity(createdRoom);
         memberRepository.saveMember(masterMember);
 
         createdRoom.initializeMasterMemberRoomId(masterMember.getMemberId());
@@ -48,7 +47,7 @@ public class RoomService {
         for (Room room : allRooms) {
             List<Member> members = memberRepository.getAllMembers(room.getRoomId());
             List<MemberDto> memberDtos = new ArrayList<>();
-            for (Member member : members) memberDtos.add(member.toMemberDto());
+            for (Member member : members) memberDtos.add(MemberDto.entityToDto(member));
             RoomDto roomDto = new RoomDto(room, memberDtos);
             roomDtos.add(roomDto);
         }
@@ -63,15 +62,12 @@ public class RoomService {
     }
 
     @Transactional
-    public MemberDto createMember(Long roomId,
-                                        String memberName,
-                                        String memberPassword,
-                                        MemberIcon memberIcon) {
+    public MemberDto createMember(Long roomId, MemberSaveRequestDto memberSaveRequestDto) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
-        Member member = Member.createMember(memberName, memberPassword, memberIcon, room);
+        Member member = Member.createMember(memberSaveRequestDto, room);
         Member saveMember = memberRepository.saveMember(member);
-        return saveMember.toMemberDto();
+        return MemberDto.entityToDto(saveMember);
     }
 
     @Transactional
@@ -79,7 +75,7 @@ public class RoomService {
         List<Member> allMembers = memberRepository.getAllMembers(roomId);
         List<MemberDto> memberDtoList = new ArrayList<>();
         for (Member member : allMembers) {
-            memberDtoList.add(member.toMemberDto());
+            memberDtoList.add(MemberDto.entityToDto(member));
         }
         return memberDtoList;
     }
@@ -91,9 +87,9 @@ public class RoomService {
 
     @Transactional
     public Boolean validateMemberPassword(Long memberId, String memberPassword) {
-        Optional<Member> member = memberRepository.findMemberById(memberId);
-        if (member.isEmpty()) return false;
-        return member.get().validatePassword(memberPassword);
+        Member member = memberRepository.findMemberById(memberId);
+        if (member == null) return false;
+        return member.validatePassword(memberPassword);
     }
 
     @Transactional
@@ -102,12 +98,14 @@ public class RoomService {
     }
 
     @Transactional
-    public MemberDto updateMember(Long memberId, String memberName, String memberPassword, MemberIcon memberIcon) {
-        Optional<Member> member = memberRepository.findMemberById(memberId);
-        if(member.isPresent()){
-            member.get().updateMember(memberName, memberPassword, memberIcon);
-            memberRepository.saveMember(member.get());
-            return member.get().toMemberDto();
+    public MemberDto updateMember(Long memberId, MemberSaveRequestDto memberSaveRequestDto) {
+        Member member = memberRepository.findMemberById(memberId);
+        if(member != null){
+            member.updateMember(memberSaveRequestDto.getMemberName(),
+                    memberSaveRequestDto.getMemberPassword(),
+                    memberSaveRequestDto.getMemberIcon());
+            memberRepository.saveMember(member);
+            return MemberDto.entityToDto(member);
         }
         return null;
     }

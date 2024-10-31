@@ -2,12 +2,11 @@ package housit.housit_backend.dto.request;
 
 import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.domain.room.Room;
-import lombok.Builder;
 import lombok.Data;
 
 
 @Data
-public class RoomCreateRequestDto {
+public class RoomSaveRequestDto {
     private String roomName;
     private String description;
     private String roomPassword;

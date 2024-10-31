@@ -1,11 +1,12 @@
 package housit.housit_backend.domain.finance;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDate;
 
-@Entity
+@Entity @Getter
 @ToString
 public class AccountTxn {
 

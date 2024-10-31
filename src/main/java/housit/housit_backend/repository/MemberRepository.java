@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository {
-    public Member saveMember(Member member);
-    public Optional<Member> findMemberById(Long memberId);
-    public void deleteMember(Long memberId);
-    public List<Member> getAllMembers(Long roomId);
+    Member saveMember(Member member);
+    Member findMemberById(Long memberId);
+    void deleteMember(Long memberId);
+    List<Member> getAllMembers(Long roomId);
 }

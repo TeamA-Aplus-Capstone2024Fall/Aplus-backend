@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomRepository{
-    public Room saveRoom(Room room);
-    public Optional<Room> findRoomById(Long roomId);
-    public void deleteRoom(Long roomId);
+    Room saveRoom(Room room);
+    Optional<Room> findRoomById(Long roomId);
+    void deleteRoom(Long roomId);
 
-    public List<Room> findAllRooms(Pageable pageable);
-    public List<Room> findRoomsByRoomName(String roomName, Pageable pageable);
+    List<Room> findAllRooms(Pageable pageable);
+    List<Room> findRoomsByRoomName(String roomName, Pageable pageable);
 }

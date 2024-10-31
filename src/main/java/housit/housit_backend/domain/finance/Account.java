@@ -1,13 +1,14 @@
 package housit.housit_backend.domain.finance;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.ToString;
 import housit.housit_backend.domain.room.Room;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity @Getter
 @ToString
 public class Account {
 

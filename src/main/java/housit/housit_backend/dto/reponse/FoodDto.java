@@ -1,5 +1,6 @@
 package housit.housit_backend.dto.reponse;
 
+import housit.housit_backend.domain.food.Food;
 import housit.housit_backend.domain.food.StorageType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -23,4 +24,20 @@ public class FoodDto {
     private String memberName;     // 음식 주인 (Nullable)
     private Boolean isShared;      // 공유 음식 여부 (Nullable)
     private StorageType storageType;  // 보관 타입 (냉장, 냉동, 상온)
+
+    public static FoodDto entityToDto(Food food) {
+        return FoodDto.builder()
+                .foodId(food.getFoodId())
+                .foodName(food.getFoodName())
+                .createAt(food.getCreateAt())
+                .expirationDate(food.getExpirationDate())
+                .minimumQuantity(food.getMinimumQuantity())
+                .quantity(food.getQuantity())
+                .amount(food.getAmount())
+                .isFavorite(food.getIsFavorite())
+                .memberName(food.getMemberName())
+                .isShared(food.getIsShared())
+                .storageType(food.getStorageType())
+                .build();
+    }
 }

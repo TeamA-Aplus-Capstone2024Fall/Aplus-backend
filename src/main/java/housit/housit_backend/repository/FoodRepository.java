@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FoodRepository {
-    public Food saveFood(Food food);
-    public Optional<Food> findFoodById(Long foodId);
-    public void deleteFood(Long foodId);
-    public List<Food> getAllFoods(Long roomId);
+    void saveFood(Food food);
+    Optional<Food> findFoodById(Long foodId);
+    void deleteFood(Long foodId);
+    List<Food> getAllFoods(Long roomId);
 }

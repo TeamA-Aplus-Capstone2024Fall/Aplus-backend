@@ -11,13 +11,13 @@ import java.time.LocalDate;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Builder
-@Entity
+@Entity @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Food {
 
-    @Id @Getter
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long foodId;
 
@@ -39,22 +39,6 @@ public class Food {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "roomId")
     private Room room;
-
-    public FoodDto toFoodDto() {
-        return FoodDto.builder()
-                .foodId(foodId)
-                .foodName(foodName)
-                .createAt(createAt)
-                .expirationDate(expirationDate)
-                .minimumQuantity(minimumQuantity)
-                .quantity(quantity)
-                .amount(amount)
-                .isFavorite(isFavorite)
-                .memberName(memberName)
-                .isShared(isShared)
-                .storageType(storageType)
-                .build();
-    }
 
     public void updateFood(FoodSaveRequestDto dto) {
         this.foodName = dto.getFoodName();

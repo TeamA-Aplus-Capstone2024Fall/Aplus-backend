@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +24,11 @@ public class FoodService {
     @Transactional
     public List<FoodDto> getFoods(Long roomId) {
         List<Food> foods = foodRepository.getAllFoods(roomId);
-        return foods.stream().map(Food::toFoodDto).collect(Collectors.toList());
+        List<FoodDto> foodDtos = new ArrayList<>();
+        for (Food food : foods) {
+            foodDtos.add(FoodDto.entityToDto(food));
+        }
+        return foodDtos;
     }
 
     @Transactional
@@ -36,16 +41,16 @@ public class FoodService {
 
         foodRepository.saveFood(food);
 
-        return food.toFoodDto();  // 저장한 Food 엔티티 반환
+        return FoodDto.entityToDto(food);  // 저장한 Food 엔티티 반환
     }
 
     @Transactional
     public FoodDto updateFood(Long foodId, FoodSaveRequestDto foodSaveRequestDto) {
-        Optional<Food> food = foodRepository.findFoodById(foodId);
+        Optional<Food> food = foodRepository.findFoodById(foodId); // Food 는 영속 상태
         if(food.isPresent()) {
             food.get().updateFood(foodSaveRequestDto);
-            foodRepository.saveFood(food.get());
-            return food.get().toFoodDto();
+            //foodRepository.saveFood(food.get()); // 굳이 saveFood 필요 없이 dirty checking 으로 트랜잭션 끝날 때 업데이트됨
+            return FoodDto.entityToDto(food.get());
         }
         return null;
     }

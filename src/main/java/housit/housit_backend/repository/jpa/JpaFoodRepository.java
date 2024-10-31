@@ -4,6 +4,7 @@ import housit.housit_backend.domain.food.Food;
 import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.repository.FoodRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,10 +17,8 @@ public class JpaFoodRepository implements FoodRepository {
     private final EntityManager em;
 
     @Override
-    public Food saveFood(Food food) {
-        if(food.getFoodId() == null) em.persist(food);
-        else em.merge(food);
-        return food;
+    public void saveFood(Food food) {
+        em.persist(food);
     }
 
     @Override

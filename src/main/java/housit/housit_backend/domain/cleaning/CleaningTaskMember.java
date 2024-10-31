@@ -1,16 +1,17 @@
 package housit.housit_backend.domain.cleaning;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.ToString;
 import housit.housit_backend.domain.room.Member;
 
-@Entity
+@Entity @Getter
 @ToString
 public class CleaningTaskMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long cleaningTaskMemberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cleaningTaskId", nullable = false)

@@ -1,10 +1,9 @@
 package housit.housit_backend.controller;
 
-import housit.housit_backend.domain.room.MemberIcon;
 import housit.housit_backend.dto.reponse.RoomCreateResponseDto;
 import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.reponse.RoomDto;
-import housit.housit_backend.dto.request.RoomCreateRequestDto;
+import housit.housit_backend.dto.request.RoomSaveRequestDto;
 import housit.housit_backend.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -23,8 +21,8 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping("/room")
-    public RoomCreateResponseDto createRoom(@RequestBody RoomCreateRequestDto roomCreateRequestDto) {
-        return roomService.createRoom(roomCreateRequestDto);
+    public RoomCreateResponseDto createRoom(@RequestBody RoomSaveRequestDto roomSaveRequestDto) {
+        return roomService.createRoom(roomSaveRequestDto);
     }
 
     @GetMapping("/room/{roomId}")

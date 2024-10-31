@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Builder
-@Entity
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
-    @Id @Getter
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long roomId;
 

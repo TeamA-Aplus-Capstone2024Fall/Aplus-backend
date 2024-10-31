@@ -1,8 +1,9 @@
 package housit.housit_backend.domain.finance;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
-@Entity
+@Entity @Getter
 public class SavingGoal {
 
     @Id
