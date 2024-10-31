@@ -59,29 +59,20 @@ public class EventService {
     @Transactional
     public EventDto updateEvent(Long roomId, Long eventId, EventSaveRequestDto eventSaveRequestDto) {
         Event event = eventRepository.findEventById(eventId);
-
-        List<EventMember> eventMembers = eventRepository.getAllEventMembers(event);
         List<Member> updatedMembers = findBelongMembers(eventSaveRequestDto.getMemberIds());
 
-        // 업데이트한 이벤트에 멤버가 없으면 기존 EventMember 삭제
-        for (EventMember eventMember : eventMembers) {
-            Member member = eventMember.getMember();
-            if(!updatedMembers.contains(member)) {eventMembers.remove(eventMember);}
+        // 새로운 EventMember 리스트 생성
+        List<EventMember> newEventMembers = new ArrayList<>();
+
+        // 새로운 멤버들로 EventMember 생성
+        for (Member member : updatedMembers) {
+            EventMember newMember = new EventMember();
+            newMember.createMember(member);
+            newMember.createEvent(event);
+            newEventMembers.add(newMember);
         }
 
-        // 업데이트한 이벤트에 새로운 멤버가 있으면 EventMember 추가
-        for (Member belongMember : updatedMembers) {
-            // eventMembers에서 해당 멤버를 가진 EventMember가 있는지 확인
-            boolean exists = eventMembers.stream()
-                    .anyMatch(em -> em.getMember().getMemberId().equals(belongMember.getMemberId()));
-            if (!exists) {
-                EventMember newEventMember = new EventMember();
-                newEventMember.createMember(belongMember);
-                eventMembers.add(newEventMember);
-            }
-        }
-
-        event.updateEvent(eventSaveRequestDto, eventMembers);
+        event.updateEvent(eventSaveRequestDto, newEventMembers);
         return EventDto.entityToDto(event);
     }
 

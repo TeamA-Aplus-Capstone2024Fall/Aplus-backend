@@ -49,12 +49,18 @@ public class Event {
         return event;
     }
 
-    public void updateEvent(EventSaveRequestDto eventSaveRequestDto, List<EventMember> eventMembers) {
+    public void updateEvent(EventSaveRequestDto eventSaveRequestDto, List<EventMember> newEventMembers) {
         this.eventName = eventSaveRequestDto.getEventName();
         this.eventDay = eventSaveRequestDto.getEventDay();
         this.eventTime = eventSaveRequestDto.getEventTime();
-        this.eventMembers = eventMembers;
-        for (EventMember eventMember : eventMembers) {
+
+        // 기존 리스트 clear
+        this.eventMembers.clear();
+        // 새로운 멤버들 추가
+        this.eventMembers.addAll(newEventMembers);
+
+        // 양방향 관계 설정
+        for (EventMember eventMember : newEventMembers) {
             eventMember.createEvent(this);
         }
     }
