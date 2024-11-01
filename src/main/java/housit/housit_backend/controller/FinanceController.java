@@ -48,8 +48,9 @@ public class FinanceController {
 
     // 계좌 로그 불러오기
     @GetMapping("/room/{roomId}/finance/{accountId}")
-    public List<AccountTxn> getTxns(@PathVariable Long roomId, @PathVariable Long accountId) {
-        return financeService.getTxns(roomId, accountId);
+    public List<AccountTxn> getTxns(@PathVariable Long roomId, @PathVariable Long accountId,
+                                    @RequestParam Integer year, @RequestParam Integer month) {
+        return financeService.getTxns(roomId, accountId, year, month);
     }
 
     // Txn 생성

@@ -18,4 +18,5 @@ public interface FinanceRepository {
 
     List<Account> findAllAccounts(Room room);
     List<AccountTxn> findAllTxns(Account account);
+    List<AccountTxn> findAllTxnsByYearMonth(Account account, Integer year, Integer month);
 }

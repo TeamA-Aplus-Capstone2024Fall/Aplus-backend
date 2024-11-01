@@ -52,9 +52,9 @@ public class FinanceService {
         financeRepository.deleteAccount(financeRepository.findAccountById(accountId));
     }
 
-    public List<AccountTxn> getTxns(Long roomId, Long accountId) {
+    public List<AccountTxn> getTxns(Long roomId, Long accountId, Integer year, Integer month) {
         Account account = financeRepository.findAccountById(accountId);
-        return financeRepository.findAllTxns(account);
+        return financeRepository.findAllTxnsByYearMonth(account, year, month);
     }
 
     @Transactional

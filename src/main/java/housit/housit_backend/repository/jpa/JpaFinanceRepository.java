@@ -59,4 +59,15 @@ public class JpaFinanceRepository implements FinanceRepository {
                 .setParameter("account", account)
                 .getResultList();
     }
+
+    @Override
+    public List<AccountTxn> findAllTxnsByYearMonth(Account account, Integer year, Integer month) {
+        return em.createQuery("select at from AccountTxn at where at.account =: account " +
+                        "and year(at.txnDate) =: year and month(at.txnDate) =: month " +
+                        "order by at.txnDate desc", AccountTxn.class)
+                .setParameter("account", account)
+                .setParameter("year", year)
+                .setParameter("month", month)
+                .getResultList();
+    }
 }
