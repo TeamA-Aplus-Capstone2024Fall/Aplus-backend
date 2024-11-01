@@ -5,12 +5,13 @@ import housit.housit_backend.dto.request.AccountTxnSaveDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDate;
 
 
 @Entity @Getter
-@ToString
+@ToString @BatchSize(size = 100)
 public class AccountTxn {
 
     @Id

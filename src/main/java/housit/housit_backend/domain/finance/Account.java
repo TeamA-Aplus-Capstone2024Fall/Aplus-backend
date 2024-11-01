@@ -6,12 +6,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
 import housit.housit_backend.domain.room.Room;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity @Getter
-@ToString
+@ToString @BatchSize(size = 100)
 public class Account {
 
     @Id

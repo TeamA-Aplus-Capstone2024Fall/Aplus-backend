@@ -2,6 +2,7 @@ package housit.housit_backend.controller;
 
 import housit.housit_backend.domain.finance.AccountTxn;
 import housit.housit_backend.dto.reponse.FinanceDto;
+import housit.housit_backend.dto.reponse.IncomeDto;
 import housit.housit_backend.dto.request.AccountSaveDto;
 import housit.housit_backend.dto.request.AccountTxnSaveDto;
 import housit.housit_backend.service.FinanceService;
@@ -93,5 +94,20 @@ public class FinanceController {
                                   @RequestParam Long fromAccountId,
                                   @RequestParam Long toAccountId) {
         return financeService.updateTransferTxn(roomId, accountTxnId, accountTxnSaveDto, fromAccountId, toAccountId);
+    }
+
+    // TransferTxn 삭제
+//    @DeleteMapping("/room/{roomId}/finance/accountTransferTxn/{accountTxnId}")
+//    public void deleteTransferTxn(@PathVariable Long roomId,
+//                                  @PathVariable Long accountTxnId) {
+//        financeService.deleteTransferTxn(accountTxnId);
+//    }
+
+    // Income 로그 불러오기
+    @GetMapping("/room/{roomId}/finance/income")
+    public IncomeDto getIncomeTxns(@PathVariable Long roomId,
+                                   @RequestParam Integer year,
+                                   @RequestParam Integer month) {
+        return financeService.getIncomeTxns(roomId, year, month);
     }
 }

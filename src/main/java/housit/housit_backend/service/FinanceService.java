@@ -5,6 +5,7 @@ import housit.housit_backend.domain.finance.AccountTxn;
 import housit.housit_backend.domain.finance.TxnType;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.FinanceDto;
+import housit.housit_backend.dto.reponse.IncomeDto;
 import housit.housit_backend.dto.request.AccountSaveDto;
 import housit.housit_backend.dto.request.AccountTxnSaveDto;
 import housit.housit_backend.repository.FinanceRepository;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -125,5 +127,16 @@ public class FinanceService {
         financeRepository.deleteTxn(oldTxn);
 
         return createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId);
+    }
+
+    public IncomeDto getIncomeTxns(Long roomId, Integer year, Integer month) {
+        Room room = roomRepository.findRoomById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+        List<Account> allAccounts = financeRepository.findAllAccounts(room);
+        List<AccountTxn> allTxns = new ArrayList<>();
+        for (Account allAccount : allAccounts) {
+            allTxns.addAll(financeRepository.findAllTxnsByYearMonthWithType(allAccount, year, month, TxnType.DEPOSIT));
+        }
+        return new IncomeDto(allTxns);
     }
 }

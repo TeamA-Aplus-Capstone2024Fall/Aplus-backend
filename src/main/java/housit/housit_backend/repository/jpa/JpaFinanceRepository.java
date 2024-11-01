@@ -2,6 +2,7 @@ package housit.housit_backend.repository.jpa;
 
 import housit.housit_backend.domain.finance.Account;
 import housit.housit_backend.domain.finance.AccountTxn;
+import housit.housit_backend.domain.finance.TxnType;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.repository.FinanceRepository;
 import jakarta.persistence.EntityManager;
@@ -53,14 +54,6 @@ public class JpaFinanceRepository implements FinanceRepository {
     }
 
     @Override
-    public List<AccountTxn> findAllTxns(Account account) {
-        return em.createQuery("select at from AccountTxn at where at.account =: account " +
-                        "order by at.txnDate desc", AccountTxn.class)
-                .setParameter("account", account)
-                .getResultList();
-    }
-
-    @Override
     public List<AccountTxn> findAllTxnsByYearMonth(Account account, Integer year, Integer month) {
         return em.createQuery("select at from AccountTxn at where at.account =: account " +
                         "and year(at.txnDate) =: year and month(at.txnDate) =: month " +
@@ -68,6 +61,19 @@ public class JpaFinanceRepository implements FinanceRepository {
                 .setParameter("account", account)
                 .setParameter("year", year)
                 .setParameter("month", month)
+                .getResultList();
+    }
+
+    @Override
+    public List<AccountTxn> findAllTxnsByYearMonthWithType(Account account, Integer year, Integer month, TxnType type) {
+        return em.createQuery("select at from AccountTxn at where at.account =: account " +
+                        "and year(at.txnDate) =: year and month(at.txnDate) =: month " +
+                        "and at.txnType =: type " +
+                        "order by at.txnDate desc", AccountTxn.class)
+                .setParameter("account", account)
+                .setParameter("year", year)
+                .setParameter("month", month)
+                .setParameter("type", type)
                 .getResultList();
     }
 }

@@ -2,6 +2,7 @@ package housit.housit_backend.repository;
 
 import housit.housit_backend.domain.finance.Account;
 import housit.housit_backend.domain.finance.AccountTxn;
+import housit.housit_backend.domain.finance.TxnType;
 import housit.housit_backend.domain.room.Room;
 
 import java.util.List;
@@ -17,6 +18,6 @@ public interface FinanceRepository {
     void deleteTxn(AccountTxn accountTxn);
 
     List<Account> findAllAccounts(Room room);
-    List<AccountTxn> findAllTxns(Account account);
     List<AccountTxn> findAllTxnsByYearMonth(Account account, Integer year, Integer month);
+    List<AccountTxn> findAllTxnsByYearMonthWithType(Account account, Integer year, Integer month, TxnType type);
 }
