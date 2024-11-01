@@ -31,7 +31,7 @@ public class FinanceController {
         return financeService.createAccount(roomId, accountSaveDto);
     }
 
-    // 계좌 rename
+    // 계좌 수정
     @PutMapping("/room/{roomId}/finance/{accountId}")
     public Long updateAccount(@PathVariable Long roomId,
                               @PathVariable Long accountId,
@@ -39,10 +39,17 @@ public class FinanceController {
         return financeService.updateAccount(accountId, accountSaveDto);
     }
 
+    // 계좌 삭제
+    @DeleteMapping("/room/{roomId}/finance/{accountId}")
+    public void deleteAccount(@PathVariable Long roomId,
+                              @PathVariable Long accountId) {
+        financeService.deleteAccount(accountId);
+    }
+
     // 계좌 로그 불러오기
     @GetMapping("/room/{roomId}/finance/{accountId}")
     public List<AccountTxn> getTxns(@PathVariable Long roomId, @PathVariable Long accountId) {
-        return financeService.getTxn(roomId, accountId);
+        return financeService.getTxns(roomId, accountId);
     }
 
     // Txn 생성

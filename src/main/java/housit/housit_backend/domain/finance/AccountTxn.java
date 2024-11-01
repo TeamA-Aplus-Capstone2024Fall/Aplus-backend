@@ -29,9 +29,7 @@ public class AccountTxn {
     private LocalDate txnDate;  // 거래 날짜
     private String description;  // 거래 내역
 
-    @JsonIgnore
     private Long fromTxnId; // 채워져있으면 해당 AccountTxn 에서 transfer
-    @JsonIgnore
     private Long toTxnId; // 채워져있으면 해당 AccountTxn 로 transfer
 
     @JsonIgnore
