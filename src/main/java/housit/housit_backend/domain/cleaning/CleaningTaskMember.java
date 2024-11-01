@@ -20,4 +20,12 @@ public class CleaningTaskMember {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
+
+    public void createCleaning(CleaningTask cleaningTask) {
+        this.cleaningTask = cleaningTask;
+    }
+
+    public void creatMember(Member member) {
+        this.member = member;
+    }
 }

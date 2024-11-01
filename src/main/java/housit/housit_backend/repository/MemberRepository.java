@@ -10,4 +10,5 @@ public interface MemberRepository {
     Member findMemberById(Long memberId);
     void deleteMember(Long memberId);
     List<Member> getAllMembers(Long roomId);
+    List<Member> findBelongMembers(List<Long> memberIds);
 }

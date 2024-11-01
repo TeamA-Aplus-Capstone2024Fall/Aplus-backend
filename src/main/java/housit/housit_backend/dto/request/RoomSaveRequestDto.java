@@ -4,7 +4,6 @@ import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.domain.room.Room;
 import lombok.Data;
 
-
 @Data
 public class RoomSaveRequestDto {
     private String roomName;

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +38,14 @@ public class JpaMemberRepository implements MemberRepository {
         return em.createQuery("select m from Member m where m.room.id = :roomId", Member.class) // room의 id를 조건으로 조회
                 .setParameter("roomId", roomId)  // 파라미터 바인딩
                 .getResultList();
+    }
+
+    @Override
+    public List<Member> findBelongMembers(List<Long> memberIds) { // 이거 where in 절로 최적화 가능
+        List<Member> members = new ArrayList<>();
+        for (Long memberId : memberIds) {
+            members.add(findMemberById(memberId));
+        }
+        return members;
     }
 }

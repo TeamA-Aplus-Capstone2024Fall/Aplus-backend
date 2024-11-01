@@ -60,17 +60,17 @@ public class EventService {
         List<Member> updatedMembers = findBelongMembers(eventSaveRequestDto.getMemberIds());
 
         // 새로운 EventMember 리스트 생성
-        List<EventMember> newEventMembers = new ArrayList<>();
+        List<EventMember> newMembers = new ArrayList<>();
 
         // 새로운 멤버들로 EventMember 생성
         for (Member member : updatedMembers) {
             EventMember newMember = new EventMember();
             newMember.createMember(member);
             newMember.createEvent(event);
-            newEventMembers.add(newMember);
+            newMembers.add(newMember);
         }
 
-        event.updateEvent(eventSaveRequestDto, newEventMembers);
+        event.updateEvent(eventSaveRequestDto, newMembers);
         return EventDto.entityToDto(event);
     }
 
