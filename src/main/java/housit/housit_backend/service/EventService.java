@@ -26,7 +26,7 @@ public class EventService {
     private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
 
-    public List<EventDto> getEvents(Long roomId) {
+    public List<EventDto> getEvents(Long roomId) { // N+1 터짐
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
         List<Event> events = eventRepository.getAllEvents(room);
@@ -74,6 +74,11 @@ public class EventService {
 
         event.updateEvent(eventSaveRequestDto, newEventMembers);
         return EventDto.entityToDto(event);
+    }
+
+    @Transactional
+    public void deleteEvent(Long roomId, Long eventId) {
+        eventRepository.deleteEvent(eventId);
     }
 
     private List<Member> findBelongMembers(List<Long> memberIds) {

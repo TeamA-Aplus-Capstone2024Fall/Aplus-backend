@@ -5,6 +5,7 @@ import housit.housit_backend.dto.request.EventSaveRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import housit.housit_backend.domain.room.Room;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,6 +33,7 @@ public class Event {
     @JoinColumn(name = "roomId", nullable = false)
     private Room room;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventMember> eventMembers = new ArrayList<>();
 

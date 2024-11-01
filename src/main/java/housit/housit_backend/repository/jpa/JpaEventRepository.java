@@ -29,7 +29,7 @@ public class JpaEventRepository implements EventRepository {
 
     @Override
     public void deleteEvent(Long eventId) {
-
+        em.remove(findEventById(eventId));
     }
 
     @Override
