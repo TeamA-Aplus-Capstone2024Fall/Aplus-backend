@@ -27,12 +27,12 @@ public class AccountTxn {
 
     @Column(nullable = false)
     private LocalDate txnDate;  // 거래 날짜
-    private String description;  // 거래 내역 (Nullable)
+    private String description;  // 거래 내역
 
     @JsonIgnore
-    private Long fromTxnId; // 채워져있으면 해당 Account 에서 transfer
+    private Long fromTxnId; // 채워져있으면 해당 AccountTxn 에서 transfer
     @JsonIgnore
-    private Long toTxnId; // 채워져있으면 해당 Account 로 transfer
+    private Long toTxnId; // 채워져있으면 해당 AccountTxn 로 transfer
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

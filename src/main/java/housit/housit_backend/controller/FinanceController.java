@@ -45,7 +45,7 @@ public class FinanceController {
         return financeService.getTxn(roomId, accountId);
     }
 
-    // 계좌 내역 생성
+    // Txn 생성
     @PostMapping("/room/{roomId}/finance/{accountId}/accountTxn")
     public Long createTxn(@PathVariable Long roomId,
                           @PathVariable Long accountId,
@@ -53,11 +53,31 @@ public class FinanceController {
         return financeService.createTxn(roomId, accountId, accountTxnSaveDto);
     }
 
-    @PutMapping("/room/{roomId}/finance/{accountId}/accountTxn/{accountTxnId}")
+    // Txn 수정
+    @PutMapping("/room/{roomId}/finance/accountTxn/{accountTxnId}")
     public void updateTxn(@PathVariable Long roomId,
-                          @PathVariable Long accountId,
                           @PathVariable Long accountTxnId,
                           @RequestBody AccountTxnSaveDto accountTxnSaveDto) {
-        financeService.updateTxn(roomId, accountId, accountTxnId, accountTxnSaveDto);
+        financeService.updateTxn(roomId, accountTxnId, accountTxnSaveDto);
     }
+
+    // TransferTxn 생성
+    @PostMapping("/room/{roomId}/finance/accountTransferTxn")
+    public Long createTransferTxn(@PathVariable Long roomId,
+                                  @RequestBody AccountTxnSaveDto accountTxnSaveDto,
+                                  @RequestParam Long fromAccountId,
+                                  @RequestParam Long toAccountId) {
+        return financeService.createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId);
+    }
+
+    // TransferTxn 생성
+    @PutMapping("/room/{roomId}/finance/accountTransferTxn/{accountTxnId}")
+    public Long updateTransferTxn(@PathVariable Long roomId,
+                                  @RequestBody AccountTxnSaveDto accountTxnSaveDto,
+                                  @RequestParam Long fromAccountId,
+                                  @RequestParam Long toAccountId) {
+        return financeService.createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId);
+    }
+
+
 }

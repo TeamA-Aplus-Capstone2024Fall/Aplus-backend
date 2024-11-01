@@ -49,18 +49,10 @@ public class FinanceService {
 
     @Transactional
     public Long createTxn(Long roomId, Long accountId, AccountTxnSaveDto accountTxnSaveDto) {
-        TxnType txnType = accountTxnSaveDto.getTxnType();
-        if(txnType == TxnType.TRANSFER) {
-            Account fromAccount = financeRepository.findAccountById(accountTxnSaveDto.getFromAccountId());
-            Account toAccount = financeRepository.findAccountById(accountTxnSaveDto.getToAccountId());
-            AccountTxn fromTxn = AccountTxn.create(accountTxnSaveDto, fromAccount);
-            AccountTxn toTxn = AccountTxn.create(accountTxnSaveDto, toAccount);
-            financeRepository.saveTxn(fromTxn);
-            financeRepository.saveTxn(toTxn);
-            fromTxn.setFromTxn(toTxn.getAccountTxnId());
-            toTxn.setToTxn(fromTxn.getAccountTxnId());
-            return fromTxn.getAccountTxnId();
-        }
+        TxnType txnType = accountTxnSaveDto.getTxnType(); // TRANSFER 타입 체크
+        if(txnType == TxnType.TRANSFER)
+            throw new IllegalArgumentException("Transaction type must be DEPOSIT or WITHDRAWAL");
+
         Account account = financeRepository.findAccountById(accountId);
         AccountTxn accountTxn = AccountTxn.create(accountTxnSaveDto, account);
         financeRepository.saveTxn(accountTxn);
@@ -68,7 +60,25 @@ public class FinanceService {
     }
 
     @Transactional
-    public void updateTxn(Long roomId, Long accountId, Long accountTxnId, AccountTxnSaveDto accountTxnSaveDto) {
+    public Long createTransferTxn(Long roomId, AccountTxnSaveDto accountTxnSaveDto,
+                                  Long fromAccountId, Long toAccountId) {
+        TxnType txnType = accountTxnSaveDto.getTxnType(); // TRANSFER 타입 체크
+        if(txnType != TxnType.TRANSFER)
+            throw new IllegalArgumentException("Transaction type must be DEPOSIT or WITHDRAWAL");
+
+        Account fromAccount = financeRepository.findAccountById(fromAccountId);
+        Account toAccount = financeRepository.findAccountById(toAccountId);
+        AccountTxn fromTxn = AccountTxn.create(accountTxnSaveDto, fromAccount);
+        AccountTxn toTxn = AccountTxn.create(accountTxnSaveDto, toAccount);
+        financeRepository.saveTxn(fromTxn); // fromTxn 저장
+        financeRepository.saveTxn(toTxn); // toTxn 저장
+        fromTxn.setFromTxn(toTxn.getAccountTxnId()); // fromTxn 에 toTxnId 저장
+        toTxn.setToTxn(fromTxn.getAccountTxnId()); // toTxn 에 fromTxnId 저장
+        return fromTxn.getAccountTxnId();
+    }
+
+    @Transactional
+    public void updateTxn(Long roomId, Long accountTxnId, AccountTxnSaveDto accountTxnSaveDto) {
 
 
     }
