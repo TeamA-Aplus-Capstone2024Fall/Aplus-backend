@@ -5,7 +5,6 @@ import housit.housit_backend.domain.event.EventMember;
 import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.EventDto;
-import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.request.EventSaveRequestDto;
 import housit.housit_backend.repository.EventRepository;
 import housit.housit_backend.repository.MemberRepository;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class EventService {
     public List<EventDto> getEvents(Long roomId) { // N+1 터짐
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
-        List<Event> events = eventRepository.getAllEvents(room);
+        List<Event> events = eventRepository.findAll(room);
         List<EventDto> eventDtos = new ArrayList<>();
         for (Event event : events) {
             eventDtos.add(EventDto.entityToDto(event));
@@ -51,14 +49,14 @@ public class EventService {
         }
 
         Event event = Event.createEvent(room, eventSaveRequestDto, eventMembers);
-        eventRepository.saveEvent(event);
+        eventRepository.save(event);
 
         return EventDto.entityToDto(event);
     }
 
     @Transactional
     public EventDto updateEvent(Long roomId, Long eventId, EventSaveRequestDto eventSaveRequestDto) {
-        Event event = eventRepository.findEventById(eventId);
+        Event event = eventRepository.findById(eventId);
         List<Member> updatedMembers = findBelongMembers(eventSaveRequestDto.getMemberIds());
 
         // 새로운 EventMember 리스트 생성
@@ -78,7 +76,7 @@ public class EventService {
 
     @Transactional
     public void deleteEvent(Long roomId, Long eventId) {
-        eventRepository.deleteEvent(eventId);
+        eventRepository.delete(eventId);
     }
 
     private List<Member> findBelongMembers(List<Long> memberIds) {
