@@ -3,7 +3,7 @@ package housit.housit_backend.domain.room;
 import housit.housit_backend.dto.reponse.RoomCreateResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
-import housit.housit_backend.domain.cleaning.CleaningTask;
+import housit.housit_backend.domain.chore.Chore;
 import housit.housit_backend.domain.event.Event;
 import housit.housit_backend.domain.finance.Account;
 import housit.housit_backend.domain.finance.FinancePlan;
@@ -46,7 +46,7 @@ public class Room {
     private List<Member> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CleaningTask> cleaningTasks = new ArrayList<>();
+    private List<Chore> chores = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Food> foods = new ArrayList<>(); // 여러 음식과의 관계

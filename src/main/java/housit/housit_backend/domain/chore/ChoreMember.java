@@ -1,4 +1,4 @@
-package housit.housit_backend.domain.cleaning;
+package housit.housit_backend.domain.chore;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,22 +7,22 @@ import housit.housit_backend.domain.room.Member;
 
 @Entity @Getter
 @ToString
-public class CleaningTaskMember {
+public class ChoreMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cleaningTaskMemberId;
+    private Long choreMemberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cleaningTaskId", nullable = false)
-    private CleaningTask cleaningTask;
+    @JoinColumn(name = "choreId", nullable = false)
+    private Chore chore;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
 
-    public void createCleaning(CleaningTask cleaningTask) {
-        this.cleaningTask = cleaningTask;
+    public void createChore(Chore chore) {
+        this.chore = chore;
     }
 
     public void creatMember(Member member) {

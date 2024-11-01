@@ -1,6 +1,5 @@
 package housit.housit_backend.domain.event;
 
-import housit.housit_backend.domain.cleaning.CleaningTaskMember;
 import housit.housit_backend.dto.request.EventSaveRequestDto;
 import jakarta.persistence.*;
 import lombok.*;

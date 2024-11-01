@@ -1,6 +1,6 @@
 package housit.housit_backend.domain.room;
 
-import housit.housit_backend.domain.cleaning.CleaningTaskMember;
+import housit.housit_backend.domain.chore.ChoreMember;
 import housit.housit_backend.domain.event.EventMember;
 import housit.housit_backend.dto.request.MemberSaveRequestDto;
 import jakarta.persistence.*;
@@ -29,7 +29,7 @@ public class Member {
     private Room room;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CleaningTaskMember> cleaningTaskMembers = new ArrayList<>();
+    private List<ChoreMember> choreMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<EventMember> eventMembers = new ArrayList<>();
