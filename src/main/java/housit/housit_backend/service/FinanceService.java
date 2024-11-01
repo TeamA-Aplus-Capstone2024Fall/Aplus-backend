@@ -52,6 +52,11 @@ public class FinanceService {
         financeRepository.deleteAccount(financeRepository.findAccountById(accountId));
     }
 
+    public List<AccountTxn> getTxns(Long roomId, Long accountId) {
+        Account account = financeRepository.findAccountById(accountId);
+        return financeRepository.findAllTxns(account);
+    }
+
     @Transactional
     public Long createTxn(Long roomId, Long accountId, AccountTxnSaveDto accountTxnSaveDto) {
         TxnType txnType = accountTxnSaveDto.getTxnType(); // TRANSFER 타입 체크
@@ -88,8 +93,11 @@ public class FinanceService {
         accountTxn.update(accountTxnSaveDto);
     }
 
-    public List<AccountTxn> getTxns(Long roomId, Long accountId) {
-        Account account = financeRepository.findAccountById(accountId);
-        return financeRepository.findAllTxns(account);
+    @Transactional
+    public void deleteTxn(Long accountTxnId) {
+        AccountTxn txn = financeRepository.findTxnById(accountTxnId);
+        Account account = txn.getAccount();
+        txn.delete(account);
+        financeRepository.deleteTxn(txn);
     }
 }

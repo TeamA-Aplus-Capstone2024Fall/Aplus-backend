@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import housit.housit_backend.dto.request.AccountTxnSaveDto;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
@@ -68,5 +67,10 @@ public class AccountTxn {
         this.description = accountTxnSaveDto.getDescription();
         if(this.txnType == TxnType.DEPOSIT) account.deposit(diff);
         if(this.txnType == TxnType.WITHDRAWAL) account.withdraw(diff);
+    }
+
+    public void delete(Account account) {
+        if(txnType == TxnType.DEPOSIT) account.withdraw(this.amount);
+        if(txnType == TxnType.WITHDRAWAL) account.deposit(this.amount);
     }
 }

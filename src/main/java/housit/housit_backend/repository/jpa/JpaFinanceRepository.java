@@ -55,7 +55,7 @@ public class JpaFinanceRepository implements FinanceRepository {
     @Override
     public List<AccountTxn> findAllTxns(Account account) {
         return em.createQuery("select at from AccountTxn at where at.account =: account " +
-                        "order by at.txnDate", AccountTxn.class)
+                        "order by at.txnDate desc", AccountTxn.class)
                 .setParameter("account", account)
                 .getResultList();
     }

@@ -68,6 +68,13 @@ public class FinanceController {
         financeService.updateTxn(roomId, accountTxnId, accountTxnSaveDto);
     }
 
+    // Txn 삭제
+    @DeleteMapping("/room/{roomId}/finance/accountTxn/{accountTxnId}")
+    public void deleteTxn(@PathVariable Long roomId,
+                          @PathVariable Long accountTxnId) {
+        financeService.deleteTxn(accountTxnId);
+    }
+
     // TransferTxn 생성
     @PostMapping("/room/{roomId}/finance/accountTransferTxn")
     public Long createTransferTxn(@PathVariable Long roomId,
