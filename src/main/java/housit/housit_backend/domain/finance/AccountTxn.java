@@ -72,5 +72,13 @@ public class AccountTxn {
     public void delete(Account account) {
         if(txnType == TxnType.DEPOSIT) account.withdraw(this.amount);
         if(txnType == TxnType.WITHDRAWAL) account.deposit(this.amount);
+        if(txnType == TxnType.TRANSFER) {
+            if(fromTxnId != null) { // fromTxnId 가 존재 -> 입금에 해당하는 Txn
+                account.withdraw(this.amount);
+            }
+            if(toTxnId != null) { // toTxnId 가 존재 -> 출금에 해당하는 Txn
+                account.deposit(this.amount);
+            }
+        }
     }
 }

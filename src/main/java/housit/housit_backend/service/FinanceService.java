@@ -70,6 +70,20 @@ public class FinanceService {
     }
 
     @Transactional
+    public void updateTxn(Long roomId, Long accountTxnId, AccountTxnSaveDto accountTxnSaveDto) {
+        AccountTxn accountTxn = financeRepository.findTxnById(accountTxnId);
+        accountTxn.update(accountTxnSaveDto);
+    }
+
+    @Transactional
+    public void deleteTxn(Long accountTxnId) {
+        AccountTxn txn = financeRepository.findTxnById(accountTxnId);
+        Account account = txn.getAccount();
+        txn.delete(account);
+        financeRepository.deleteTxn(txn);
+    }
+
+    @Transactional
     public Long createTransferTxn(Long roomId, AccountTxnSaveDto accountTxnSaveDto,
                                   Long fromAccountId, Long toAccountId) {
         TxnType txnType = accountTxnSaveDto.getTxnType(); // TRANSFER 타입 체크
@@ -88,16 +102,28 @@ public class FinanceService {
     }
 
     @Transactional
-    public void updateTxn(Long roomId, Long accountTxnId, AccountTxnSaveDto accountTxnSaveDto) {
-        AccountTxn accountTxn = financeRepository.findTxnById(accountTxnId);
-        accountTxn.update(accountTxnSaveDto);
-    }
+    public Long updateTransferTxn(Long roomId, Long accountTxnId, AccountTxnSaveDto accountTxnSaveDto,
+                                  Long fromAccountId, Long toAccountId) {
+        AccountTxn oldTxn = financeRepository.findTxnById(accountTxnId);
 
-    @Transactional
-    public void deleteTxn(Long accountTxnId) {
-        AccountTxn txn = financeRepository.findTxnById(accountTxnId);
-        Account account = txn.getAccount();
-        txn.delete(account);
-        financeRepository.deleteTxn(txn);
+        if(oldTxn.getTxnType() != TxnType.TRANSFER)
+            throw new IllegalArgumentException("Transaction type must be TRANSFER");
+
+        if(oldTxn.getFromTxnId() != null) {
+            AccountTxn fromTxn = financeRepository.findTxnById(oldTxn.getFromTxnId());
+            fromTxn.delete(fromTxn.getAccount());
+            financeRepository.deleteTxn(fromTxn);
+        }
+
+        if(oldTxn.getToTxnId() != null) {
+            AccountTxn toTxn = financeRepository.findTxnById(oldTxn.getToTxnId());
+            toTxn.delete(toTxn.getAccount());
+            financeRepository.deleteTxn(toTxn);
+        }
+
+        oldTxn.delete(oldTxn.getAccount());
+        financeRepository.deleteTxn(oldTxn);
+
+        return createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId);
     }
 }

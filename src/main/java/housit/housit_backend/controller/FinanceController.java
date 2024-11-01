@@ -84,14 +84,13 @@ public class FinanceController {
         return financeService.createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId);
     }
 
-    // TransferTxn 생성
+    // TransferTxn 수정
     @PutMapping("/room/{roomId}/finance/accountTransferTxn/{accountTxnId}")
     public Long updateTransferTxn(@PathVariable Long roomId,
+                                  @PathVariable Long accountTxnId,
                                   @RequestBody AccountTxnSaveDto accountTxnSaveDto,
                                   @RequestParam Long fromAccountId,
                                   @RequestParam Long toAccountId) {
-        return financeService.createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId);
+        return financeService.updateTransferTxn(roomId, accountTxnId, accountTxnSaveDto, fromAccountId, toAccountId);
     }
-
-
 }
