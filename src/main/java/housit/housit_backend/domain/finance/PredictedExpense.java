@@ -3,6 +3,8 @@ package housit.housit_backend.domain.finance;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Entity @Getter
 public class PredictedExpense {
 
@@ -17,4 +19,5 @@ public class PredictedExpense {
     private String description;
     private String amount;
     private Boolean isChecked;
+    private LocalDate dueDate;
 }

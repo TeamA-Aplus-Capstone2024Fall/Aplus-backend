@@ -1,10 +1,14 @@
 package housit.housit_backend.domain.finance;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import housit.housit_backend.dto.request.AccountTxnSaveDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+
 
 @Entity @Getter
 @ToString
@@ -23,15 +27,48 @@ public class AccountTxn {
 
     @Column(nullable = false)
     private LocalDate txnDate;  // 거래 날짜
-
     private String description;  // 거래 내역 (Nullable)
 
+    @JsonIgnore
+    private Long fromTxnId; // 채워져있으면 해당 Account 에서 transfer
+    @JsonIgnore
+    private Long toTxnId; // 채워져있으면 해당 Account 로 transfer
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accountId", nullable = false)
     private Account account;
 
     // Enum 타입 추가: 거래 유형
-    public enum TxnType {
-        DEPOSIT, WITHDRAWAL, EXCHANGE
+
+    public static AccountTxn create(AccountTxnSaveDto accountTxnSaveDto, Account account) {
+        AccountTxn accountTxn = new AccountTxn();
+        accountTxn.amount = accountTxnSaveDto.getAmount();
+        accountTxn.txnType = accountTxnSaveDto.getTxnType();
+        accountTxn.txnDate = accountTxnSaveDto.getTxnDate();
+        accountTxn.description = accountTxnSaveDto.getDescription();
+        accountTxn.account = account;
+        if(accountTxn.txnType == TxnType.DEPOSIT) account.deposit(accountTxn.amount);
+        if(accountTxn.txnType == TxnType.WITHDRAWAL) account.withdraw(accountTxn.amount);
+        return accountTxn;
+    }
+
+    public void setFromTxn(Long toTxnId) {
+        this.toTxnId = toTxnId;
+        this.account.withdraw(this.amount);
+    }
+
+    public void setToTxn(Long fromTxnId) {
+        this.fromTxnId = fromTxnId;
+        this.account.deposit(this.amount);
+    }
+
+    public void update(AccountTxnSaveDto accountTxnSaveDto) {
+        Long diff = accountTxnSaveDto.getAmount() - this.amount;
+        this.amount = accountTxnSaveDto.getAmount();
+        this.txnDate = accountTxnSaveDto.getTxnDate();
+        this.description = accountTxnSaveDto.getDescription();
+        if(this.txnType == TxnType.DEPOSIT) account.deposit(diff);
+        if(this.txnType == TxnType.WITHDRAWAL) account.withdraw(diff);
     }
 }
