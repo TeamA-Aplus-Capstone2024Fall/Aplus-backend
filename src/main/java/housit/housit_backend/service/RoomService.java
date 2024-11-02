@@ -5,8 +5,8 @@ import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.reponse.RoomCreateResponseDto;
 import housit.housit_backend.dto.reponse.RoomDto;
-import housit.housit_backend.dto.request.MemberSaveRequestDto;
-import housit.housit_backend.dto.request.RoomSaveRequestDto;
+import housit.housit_backend.dto.request.MemberSaveDto;
+import housit.housit_backend.dto.request.RoomSaveDto;
 import housit.housit_backend.repository.MemberRepository;
 import housit.housit_backend.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +27,11 @@ public class RoomService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public RoomCreateResponseDto createRoom(RoomSaveRequestDto roomSaveRequestDto) {
-        Room createdRoom = roomSaveRequestDto.toRoomEntity();
+    public RoomCreateResponseDto createRoom(RoomSaveDto roomSaveDto) {
+        Room createdRoom = roomSaveDto.toRoomEntity();
         roomRepository.saveRoom(createdRoom);
 
-        Member masterMember = roomSaveRequestDto.toMemberEntity(createdRoom);
+        Member masterMember = roomSaveDto.toMemberEntity(createdRoom);
         memberRepository.saveMember(masterMember);
 
         createdRoom.initializeMasterMemberRoomId(masterMember.getMemberId());
@@ -62,10 +62,10 @@ public class RoomService {
     }
 
     @Transactional
-    public MemberDto createMember(Long roomId, MemberSaveRequestDto memberSaveRequestDto) {
+    public MemberDto createMember(Long roomId, MemberSaveDto memberSaveDto) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
-        Member member = Member.createMember(memberSaveRequestDto, room);
+        Member member = Member.createMember(memberSaveDto, room);
         Member saveMember = memberRepository.saveMember(member);
         return MemberDto.entityToDto(saveMember);
     }
@@ -98,12 +98,12 @@ public class RoomService {
     }
 
     @Transactional
-    public MemberDto updateMember(Long memberId, MemberSaveRequestDto memberSaveRequestDto) {
+    public MemberDto updateMember(Long memberId, MemberSaveDto memberSaveDto) {
         Member member = memberRepository.findMemberById(memberId);
         if(member != null){
-            member.updateMember(memberSaveRequestDto.getMemberName(),
-                    memberSaveRequestDto.getMemberPassword(),
-                    memberSaveRequestDto.getMemberIcon());
+            member.updateMember(memberSaveDto.getMemberName(),
+                    memberSaveDto.getMemberPassword(),
+                    memberSaveDto.getMemberIcon());
             memberRepository.saveMember(member);
             return MemberDto.entityToDto(member);
         }

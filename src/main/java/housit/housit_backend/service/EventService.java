@@ -5,7 +5,7 @@ import housit.housit_backend.domain.event.EventMember;
 import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.EventDto;
-import housit.housit_backend.dto.request.EventSaveRequestDto;
+import housit.housit_backend.dto.request.EventSaveDto;
 import housit.housit_backend.repository.EventRepository;
 import housit.housit_backend.repository.MemberRepository;
 import housit.housit_backend.repository.RoomRepository;
@@ -36,28 +36,28 @@ public class EventService {
     }
 
     @Transactional
-    public EventDto createEvent(Long roomId, EventSaveRequestDto eventSaveRequestDto) {
+    public EventDto createEvent(Long roomId, EventSaveDto eventSaveDto) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
 
         List<EventMember> eventMembers = new ArrayList<>();
-        List<Member> belongMembers = findBelongMembers(eventSaveRequestDto.getMemberIds());
+        List<Member> belongMembers = findBelongMembers(eventSaveDto.getMemberIds());
         for (Member belongMember : belongMembers) {
             EventMember eventMember = new EventMember();
             eventMember.createMember(belongMember);
             eventMembers.add(eventMember);
         }
 
-        Event event = Event.createEvent(room, eventSaveRequestDto, eventMembers);
+        Event event = Event.createEvent(room, eventSaveDto, eventMembers);
         eventRepository.save(event);
 
         return EventDto.entityToDto(event);
     }
 
     @Transactional
-    public EventDto updateEvent(Long roomId, Long eventId, EventSaveRequestDto eventSaveRequestDto) {
+    public EventDto updateEvent(Long roomId, Long eventId, EventSaveDto eventSaveDto) {
         Event event = eventRepository.findById(eventId);
-        List<Member> updatedMembers = findBelongMembers(eventSaveRequestDto.getMemberIds());
+        List<Member> updatedMembers = findBelongMembers(eventSaveDto.getMemberIds());
 
         // 새로운 EventMember 리스트 생성
         List<EventMember> newMembers = new ArrayList<>();
@@ -70,7 +70,7 @@ public class EventService {
             newMembers.add(newMember);
         }
 
-        event.updateEvent(eventSaveRequestDto, newMembers);
+        event.updateEvent(eventSaveDto, newMembers);
         return EventDto.entityToDto(event);
     }
 

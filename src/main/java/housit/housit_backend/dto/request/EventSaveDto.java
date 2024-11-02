@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class EventSaveRequestDto {
+public class EventSaveDto {
     private String eventName;  // 이벤트명
     private LocalDate eventDay;   // 이벤트 날짜
     private LocalTime eventTime;  // 이벤트 시간

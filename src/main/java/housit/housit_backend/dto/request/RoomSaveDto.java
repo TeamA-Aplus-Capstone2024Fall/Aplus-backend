@@ -5,7 +5,7 @@ import housit.housit_backend.domain.room.Room;
 import lombok.Data;
 
 @Data
-public class RoomSaveRequestDto {
+public class RoomSaveDto {
     private String roomName;
     private String description;
     private String roomPassword;

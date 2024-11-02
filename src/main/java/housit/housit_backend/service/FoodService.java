@@ -3,7 +3,7 @@ package housit.housit_backend.service;
 import housit.housit_backend.domain.food.Food;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.FoodDto;
-import housit.housit_backend.dto.request.FoodSaveRequestDto;
+import housit.housit_backend.dto.request.FoodSaveDto;
 import housit.housit_backend.repository.FoodRepository;
 import housit.housit_backend.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +31,12 @@ public class FoodService {
     }
 
     @Transactional
-    public FoodDto createFood(Long roomId, FoodSaveRequestDto foodSaveRequestDto) {
+    public FoodDto createFood(Long roomId, FoodSaveDto foodSaveDto) {
         // roomId로 Room을 조회하고 없으면 예외를 던진다
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
 
-        Food food = foodSaveRequestDto.toFoodEntity(room);
+        Food food = foodSaveDto.toFoodEntity(room);
 
         foodRepository.saveFood(food);
 
@@ -45,10 +44,10 @@ public class FoodService {
     }
 
     @Transactional
-    public FoodDto updateFood(Long foodId, FoodSaveRequestDto foodSaveRequestDto) {
+    public FoodDto updateFood(Long foodId, FoodSaveDto foodSaveDto) {
         Optional<Food> food = foodRepository.findFoodById(foodId); // Food 는 영속 상태
         if(food.isPresent()) {
-            food.get().updateFood(foodSaveRequestDto);
+            food.get().updateFood(foodSaveDto);
             //foodRepository.saveFood(food.get()); // 굳이 saveFood 필요 없이 dirty checking 으로 트랜잭션 끝날 때 업데이트됨
             return FoodDto.entityToDto(food.get());
         }

@@ -1,7 +1,7 @@
 package housit.housit_backend.controller;
 
 import housit.housit_backend.dto.reponse.EventDto;
-import housit.housit_backend.dto.request.EventSaveRequestDto;
+import housit.housit_backend.dto.request.EventSaveDto;
 import housit.housit_backend.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +23,15 @@ public class EventController {
 
     @PostMapping("/room/{roomId}/events")
     public EventDto createEvents(@PathVariable Long roomId,
-                                       @RequestBody EventSaveRequestDto eventSaveRequestDto) {
-        return eventService.createEvent(roomId, eventSaveRequestDto);
+                                       @RequestBody EventSaveDto eventSaveDto) {
+        return eventService.createEvent(roomId, eventSaveDto);
     }
 
     @PutMapping("/room/{roomId}/events/{eventId}")
     public EventDto updateEvents(@PathVariable Long roomId,
                                        @PathVariable Long eventId,
-                                       @RequestBody EventSaveRequestDto eventSaveRequestDto) {
-        return eventService.updateEvent(roomId, eventId, eventSaveRequestDto);
+                                       @RequestBody EventSaveDto eventSaveDto) {
+        return eventService.updateEvent(roomId, eventId, eventSaveDto);
     }
 
     @DeleteMapping("/room/{roomId}/events/{eventId}")

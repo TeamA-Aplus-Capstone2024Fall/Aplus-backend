@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class FoodSaveRequestDto {
+public class FoodSaveDto {
     private String foodName;       // 음식 이름
     private LocalDate createAt;         // 구입 날짜 (or 보관 날짜)
     private LocalDate expirationDate;   // 유통기한

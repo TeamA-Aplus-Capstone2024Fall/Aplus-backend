@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class ChoreSaveRequestDto {
+public class ChoreSaveDto {
     private String choreArea;  // 청소 구역
     private String color;
     private String description;

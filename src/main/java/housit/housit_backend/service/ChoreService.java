@@ -5,7 +5,7 @@ import housit.housit_backend.domain.chore.ChoreMember;
 import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.ChoreDto;
-import housit.housit_backend.dto.request.ChoreSaveRequestDto;
+import housit.housit_backend.dto.request.ChoreSaveDto;
 import housit.housit_backend.repository.ChoreRepository;
 import housit.housit_backend.repository.MemberRepository;
 import housit.housit_backend.repository.RoomRepository;
@@ -36,7 +36,7 @@ public class ChoreService {
     }
 
     @Transactional
-    public ChoreDto createChore(Long roomId, ChoreSaveRequestDto choreSaveDto) {
+    public ChoreDto createChore(Long roomId, ChoreSaveDto choreSaveDto) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
 
@@ -55,7 +55,7 @@ public class ChoreService {
     }
 
     @Transactional
-    public ChoreDto updateChore(Long roomId, Long choreTaskId, ChoreSaveRequestDto choreSaveDto) {
+    public ChoreDto updateChore(Long roomId, Long choreTaskId, ChoreSaveDto choreSaveDto) {
         Chore chore = choreRepository.findById(choreTaskId);
         List<Member> updatedMembers = memberRepository.findBelongMembers(choreSaveDto.getMemberIds());
 

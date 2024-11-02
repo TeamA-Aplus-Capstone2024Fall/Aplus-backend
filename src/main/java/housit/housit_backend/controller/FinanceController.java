@@ -119,4 +119,11 @@ public class FinanceController {
                                      @RequestParam Integer month) {
         return financeService.getExpenseTxns(roomId, year, month);
     }
+
+    // Predicted Income 생성
+    @PostMapping("/room/{roomId}/finance/predictedIncome")
+    public Long createPredictedIncome(@PathVariable Long roomId,
+                                      @RequestBody AccountTxnSaveDto accountTxnSaveDto) {
+        return financeService.createPredictedIncome(roomId, accountTxnSaveDto);
+    }
 }

@@ -2,7 +2,7 @@ package housit.housit_backend.domain.room;
 
 import housit.housit_backend.domain.chore.ChoreMember;
 import housit.housit_backend.domain.event.EventMember;
-import housit.housit_backend.dto.request.MemberSaveRequestDto;
+import housit.housit_backend.dto.request.MemberSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,11 +38,11 @@ public class Member {
         return this.memberPassword.equals(memberPassword);
     }
 
-    public static Member createMember(MemberSaveRequestDto memberSaveRequestDto, Room room) {
+    public static Member createMember(MemberSaveDto memberSaveDto, Room room) {
         return Member.builder()
-                .memberName(memberSaveRequestDto.getMemberName())
-                .memberPassword(memberSaveRequestDto.getMemberPassword())
-                .memberIcon(memberSaveRequestDto.getMemberIcon())
+                .memberName(memberSaveDto.getMemberName())
+                .memberPassword(memberSaveDto.getMemberPassword())
+                .memberIcon(memberSaveDto.getMemberIcon())
                 .room(room)
                 .build();
     }

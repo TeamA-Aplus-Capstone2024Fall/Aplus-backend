@@ -3,7 +3,7 @@ package housit.housit_backend.controller;
 import housit.housit_backend.dto.reponse.RoomCreateResponseDto;
 import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.reponse.RoomDto;
-import housit.housit_backend.dto.request.RoomSaveRequestDto;
+import housit.housit_backend.dto.request.RoomSaveDto;
 import housit.housit_backend.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +21,8 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping("/room")
-    public RoomCreateResponseDto createRoom(@RequestBody RoomSaveRequestDto roomSaveRequestDto) {
-        return roomService.createRoom(roomSaveRequestDto);
+    public RoomCreateResponseDto createRoom(@RequestBody RoomSaveDto roomSaveDto) {
+        return roomService.createRoom(roomSaveDto);
     }
 
     @GetMapping("/room/{roomId}")

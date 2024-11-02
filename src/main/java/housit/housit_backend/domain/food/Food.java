@@ -1,7 +1,6 @@
 package housit.housit_backend.domain.food;
 
-import housit.housit_backend.dto.reponse.FoodDto;
-import housit.housit_backend.dto.request.FoodSaveRequestDto;
+import housit.housit_backend.dto.request.FoodSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 import housit.housit_backend.domain.room.Room;
@@ -40,7 +39,7 @@ public class Food {
     @JoinColumn(name = "roomId")
     private Room room;
 
-    public void updateFood(FoodSaveRequestDto dto) {
+    public void updateFood(FoodSaveDto dto) {
         this.foodName = dto.getFoodName();
         this.createAt = dto.getCreateAt();
         this.expirationDate = dto.getExpirationDate();

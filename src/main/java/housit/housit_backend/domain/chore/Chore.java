@@ -1,6 +1,6 @@
 package housit.housit_backend.domain.chore;
 
-import housit.housit_backend.dto.request.ChoreSaveRequestDto;
+import housit.housit_backend.dto.request.ChoreSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 import housit.housit_backend.domain.room.Room;
@@ -36,15 +36,15 @@ public class Chore {
     @OneToMany(mappedBy = "chore", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChoreMember> choreMembers = new ArrayList<>();
 
-    public static Chore createChore(Room room, ChoreSaveRequestDto choreSaveRequestDto,
+    public static Chore createChore(Room room, ChoreSaveDto choreSaveDto,
                                            List<ChoreMember> choreMembers) {
         Chore chore = new Chore();
-        chore.choreArea = choreSaveRequestDto.getChoreArea();
-        chore.color = choreSaveRequestDto.getColor();
-        chore.description = choreSaveRequestDto.getDescription();
-        chore.icon = choreSaveRequestDto.getIcon();
-        chore.choreDay = choreSaveRequestDto.getChoreDay();
-        chore.choreFrequency = choreSaveRequestDto.getChoreFrequency();
+        chore.choreArea = choreSaveDto.getChoreArea();
+        chore.color = choreSaveDto.getColor();
+        chore.description = choreSaveDto.getDescription();
+        chore.icon = choreSaveDto.getIcon();
+        chore.choreDay = choreSaveDto.getChoreDay();
+        chore.choreFrequency = choreSaveDto.getChoreFrequency();
         chore.room = room;
         chore.choreMembers = choreMembers;
         for(ChoreMember choreMember : choreMembers) {
@@ -53,7 +53,7 @@ public class Chore {
         return chore;
     }
 
-    public void updateChore(ChoreSaveRequestDto choreSaveDto, List<ChoreMember> newMembers) {
+    public void updateChore(ChoreSaveDto choreSaveDto, List<ChoreMember> newMembers) {
         this.choreArea = choreSaveDto.getChoreArea();
         this.color = choreSaveDto.getColor();
         this.description = choreSaveDto.getDescription();

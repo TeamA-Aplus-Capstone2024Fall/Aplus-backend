@@ -1,7 +1,7 @@
 package housit.housit_backend.controller;
 
 import housit.housit_backend.dto.reponse.ChoreDto;
-import housit.housit_backend.dto.request.ChoreSaveRequestDto;
+import housit.housit_backend.dto.request.ChoreSaveDto;
 import housit.housit_backend.service.ChoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +23,14 @@ public class ChoreController {
 
     @PostMapping("/room/{roomId}/chores")
     public ChoreDto createEvents(@PathVariable Long roomId,
-                                 @RequestBody ChoreSaveRequestDto choreSaveDto) {
+                                 @RequestBody ChoreSaveDto choreSaveDto) {
         return choreService.createChore(roomId, choreSaveDto);
     }
 
     @PutMapping("/room/{roomId}/chores/{choreId}")
     public ChoreDto updateEvents(@PathVariable Long roomId,
                                  @PathVariable Long choreId,
-                                 @RequestBody ChoreSaveRequestDto choreSaveDto) {
+                                 @RequestBody ChoreSaveDto choreSaveDto) {
         return choreService.updateChore(roomId, choreId, choreSaveDto);
     }
 

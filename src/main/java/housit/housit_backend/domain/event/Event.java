@@ -1,6 +1,6 @@
 package housit.housit_backend.domain.event;
 
-import housit.housit_backend.dto.request.EventSaveRequestDto;
+import housit.housit_backend.dto.request.EventSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 import housit.housit_backend.domain.room.Room;
@@ -36,12 +36,12 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventMember> eventMembers = new ArrayList<>();
 
-    public static Event createEvent(Room room, EventSaveRequestDto eventSaveRequestDto,
+    public static Event createEvent(Room room, EventSaveDto eventSaveDto,
                                     List<EventMember> eventMembers) {
         Event event = new Event();
-        event.eventName = eventSaveRequestDto.getEventName();
-        event.eventDay = eventSaveRequestDto.getEventDay();
-        event.eventTime = eventSaveRequestDto.getEventTime();
+        event.eventName = eventSaveDto.getEventName();
+        event.eventDay = eventSaveDto.getEventDay();
+        event.eventTime = eventSaveDto.getEventTime();
         event.room = room;
         event.eventMembers = eventMembers;
         for (EventMember eventMember : eventMembers) {
@@ -50,10 +50,10 @@ public class Event {
         return event;
     }
 
-    public void updateEvent(EventSaveRequestDto eventSaveRequestDto, List<EventMember> newEventMembers) {
-        this.eventName = eventSaveRequestDto.getEventName();
-        this.eventDay = eventSaveRequestDto.getEventDay();
-        this.eventTime = eventSaveRequestDto.getEventTime();
+    public void updateEvent(EventSaveDto eventSaveDto, List<EventMember> newEventMembers) {
+        this.eventName = eventSaveDto.getEventName();
+        this.eventDay = eventSaveDto.getEventDay();
+        this.eventTime = eventSaveDto.getEventTime();
 
         // 기존 리스트 clear
         this.eventMembers.clear();

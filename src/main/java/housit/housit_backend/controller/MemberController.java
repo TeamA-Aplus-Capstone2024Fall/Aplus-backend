@@ -1,9 +1,8 @@
 package housit.housit_backend.controller;
 
-import housit.housit_backend.domain.room.MemberIcon;
 import housit.housit_backend.dto.reponse.MemberDto;
-import housit.housit_backend.dto.request.MemberSaveRequestDto;
-import housit.housit_backend.dto.request.MemberDeleteRequestDto;
+import housit.housit_backend.dto.request.MemberSaveDto;
+import housit.housit_backend.dto.request.MemberDeleteDto;
 import housit.housit_backend.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,16 +16,16 @@ public class MemberController {
 
     @PostMapping("/room/{roomId}/member")
     public MemberDto createMember(@PathVariable("roomId") Long roomId,
-                                  @RequestBody MemberSaveRequestDto memberSaveRequestDto) {
-        return roomService.createMember(roomId, memberSaveRequestDto);
+                                  @RequestBody MemberSaveDto memberSaveDto) {
+        return roomService.createMember(roomId, memberSaveDto);
     }
 
     @DeleteMapping("/room/{roomId}/member/{memberId}")
     public ResponseEntity<Void> deleteMember(@PathVariable("roomId") Long roomId,
                                              @PathVariable("memberId") Long memberId,
-                                             @RequestBody MemberDeleteRequestDto memberDeleteRequestDto) {
+                                             @RequestBody MemberDeleteDto memberDeleteDto) {
         // 비밀번호 검증 실패 시 403 Forbidden 응답 반환
-        if (!roomService.validateMemberPassword(memberId, memberDeleteRequestDto.getMemberPassword())) {
+        if (!roomService.validateMemberPassword(memberId, memberDeleteDto.getMemberPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         roomService.deleteMember(memberId);
@@ -36,7 +35,7 @@ public class MemberController {
     @PutMapping("/room/{roomId}/member/{memberId}")
     public MemberDto updateMember(@PathVariable("roomId") Long roomId,
                                   @PathVariable("memberId") Long memberId,
-                                  @RequestBody MemberSaveRequestDto memberSaveRequestDto) {
-        return roomService.updateMember(memberId, memberSaveRequestDto);
+                                  @RequestBody MemberSaveDto memberSaveDto) {
+        return roomService.updateMember(memberId, memberSaveDto);
     }
 }
