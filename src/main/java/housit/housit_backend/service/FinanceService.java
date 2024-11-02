@@ -159,6 +159,7 @@ public class FinanceService {
         return new ExpenseDto(allTxns);
     }
 
+    // PredictedIncome 생성
     @Transactional
     public Long createPredictedIncome(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
         Room room = roomRepository.findRoomById(roomId)
@@ -168,6 +169,22 @@ public class FinanceService {
         return predictedIncome.getIncomeId();
     }
 
+    // PredictedIncome 수정
+    @Transactional
+    public Long updatePredictedIncome(Long financePlanId, FinancePlanSaveDto financePlanSaveDto) {
+        PredictedIncome predictedIncome = financeRepository.findPredictedIncomeById(financePlanId);
+        predictedIncome.update(financePlanSaveDto);
+        return predictedIncome.getIncomeId();
+    }
+
+    // PredictedIncome 삭제
+    @Transactional
+    public void deletePredictedIncome(Long financePlanId) {
+        PredictedIncome predictedIncome = financeRepository.findPredictedIncomeById(financePlanId);
+        financeRepository.deleteFinancePlan(predictedIncome);
+    }
+
+    // PredictedExpense 생성
     @Transactional
     public Long createPredictedExpense(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
         Room room = roomRepository.findRoomById(roomId)
@@ -177,6 +194,22 @@ public class FinanceService {
         return predictedExpense.getExpenseId();
     }
 
+    // PredictedExpense 수정
+    @Transactional
+    public Long updatePredictedExpense(Long financePlanId, FinancePlanSaveDto financePlanSaveDto) {
+        PredictedExpense predictedExpense = financeRepository.findPredictedExpenseById(financePlanId);
+        predictedExpense.update(financePlanSaveDto);
+        return predictedExpense.getExpenseId();
+    }
+
+    // PredictedExpense 삭제
+    @Transactional
+    public void deletePredictedExpense(Long financePlanId) {
+        PredictedExpense predictedExpense = financeRepository.findPredictedExpenseById(financePlanId);
+        financeRepository.deleteFinancePlan(predictedExpense);
+    }
+
+    // SavingGoal 생성
     @Transactional
     public Long createSavingGoal(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
         Room room = roomRepository.findRoomById(roomId)
@@ -186,16 +219,18 @@ public class FinanceService {
         return savingGoal.getSavingGoalId();
     }
 
+    // SavingGoal 수정
     @Transactional
-    public Long updatePredictedIncome(Long financePlanId, FinancePlanSaveDto financePlanSaveDto) {
-        PredictedIncome predictedIncome = financeRepository.findPredictedIncomeById(financePlanId);
-        predictedIncome.update(financePlanSaveDto);
-        return predictedIncome.getIncomeId();
+    public Long updateSavingGoal(Long financePlanId, FinancePlanSaveDto financePlanSaveDto) {
+        SavingGoal savingGoal = financeRepository.findSavingGoalById(financePlanId);
+        savingGoal.update(financePlanSaveDto);
+        return savingGoal.getSavingGoalId();
     }
 
+    // SavingGoal 삭제
     @Transactional
-    public void deletePredictedIncome(Long financePlanId) {
-        PredictedIncome predictedIncome = financeRepository.findPredictedIncomeById(financePlanId);
-        financeRepository.deleteFinancePlan(predictedIncome);
+    public void deleteSavingGoal(Long financePlanId) {
+        SavingGoal savingGoal = financeRepository.findSavingGoalById(financePlanId);
+        financeRepository.deleteFinancePlan(savingGoal);
     }
 }

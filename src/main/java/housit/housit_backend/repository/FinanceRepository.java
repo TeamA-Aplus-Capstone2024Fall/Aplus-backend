@@ -33,4 +33,8 @@ public interface FinanceRepository {
     PredictedIncome findPredictedIncomeById(Long financePlanId);
 
     void deleteFinancePlan(FinancePlan financePlan);
+
+    PredictedExpense findPredictedExpenseById(Long financePlanId);
+
+    SavingGoal findSavingGoalById(Long financePlanId);
 }

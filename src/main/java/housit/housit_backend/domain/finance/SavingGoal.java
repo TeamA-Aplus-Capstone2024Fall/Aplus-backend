@@ -36,4 +36,12 @@ public class SavingGoal implements FinancePlan {
         savingGoal.room = room;
         return savingGoal;
     }
+
+    public void update(FinancePlanSaveDto financePlanSaveDto) {
+        this.description = financePlanSaveDto.getDescription();
+        this.amount = financePlanSaveDto.getAmount();
+        this.isChecked = financePlanSaveDto.getIsChecked();
+        this.dueDate = financePlanSaveDto.getDueDate();
+        this.enrolledDate = financePlanSaveDto.getEnrolledDate();
+    }
 }

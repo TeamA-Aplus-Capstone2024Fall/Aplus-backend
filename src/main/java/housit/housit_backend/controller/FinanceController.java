@@ -151,10 +151,40 @@ public class FinanceController {
         return financeService.createPredictedExpense(roomId, financePlanSaveDto);
     }
 
+    // Predicted Expense 수정
+    @PutMapping("/room/{roomId}/finance/predictedExpense/{financePlanId}")
+    public Long updatePredictedExpense(@PathVariable Long roomId,
+                                      @PathVariable Long financePlanId,
+                                      @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+        return financeService.updatePredictedExpense(financePlanId, financePlanSaveDto);
+    }
+
+    // Predicted Expense 삭제
+    @DeleteMapping("/room/{roomId}/finance/predictedExpense/{financePlanId}")
+    public void deletePredictedExpense(@PathVariable Long roomId,
+                                      @PathVariable Long financePlanId) {
+        financeService.deletePredictedExpense(financePlanId);
+    }
+
     // Saving Goal 생성
     @PostMapping("/room/{roomId}/finance/savingGoal")
     public Long createSavingGoal(@PathVariable Long roomId,
                                  @RequestBody FinancePlanSaveDto financePlanSaveDto) {
         return financeService.createSavingGoal(roomId, financePlanSaveDto);
+    }
+
+    // Saving Goal 수정
+    @PutMapping("/room/{roomId}/finance/savingGoal/{financePlanId}")
+    public Long updateSavingGoal(@PathVariable Long roomId,
+                                 @PathVariable Long financePlanId,
+                                 @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+        return financeService.updateSavingGoal(financePlanId, financePlanSaveDto);
+    }
+
+    // Saving Goal 삭제
+    @DeleteMapping("/room/{roomId}/finance/savingGoal/{financePlanId}")
+    public void deleteSavingGoal(@PathVariable Long roomId,
+                                 @PathVariable Long financePlanId) {
+        financeService.deleteSavingGoal(financePlanId);
     }
 }

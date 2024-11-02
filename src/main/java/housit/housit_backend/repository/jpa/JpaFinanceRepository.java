@@ -133,4 +133,14 @@ public class JpaFinanceRepository implements FinanceRepository {
     public void deleteFinancePlan(FinancePlan financePlan) {
         em.remove(financePlan);
     }
+
+    @Override
+    public PredictedExpense findPredictedExpenseById(Long financePlanId) {
+        return em.find(PredictedExpense.class, financePlanId);
+    }
+
+    @Override
+    public SavingGoal findSavingGoalById(Long financePlanId) {
+        return em.find(SavingGoal.class, financePlanId);
+    }
 }
