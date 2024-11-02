@@ -3,6 +3,7 @@ package housit.housit_backend.repository;
 import housit.housit_backend.domain.finance.*;
 import housit.housit_backend.domain.room.Room;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public interface FinanceRepository {
@@ -29,5 +30,7 @@ public interface FinanceRepository {
 
     Long findTotalSumByDate(List<Account> allAccounts, Room room, Integer year, Integer month, TxnType txnType);
 
-    FinancePlan findFinancePlanById(Long financePlanId);
+    PredictedIncome findPredictedIncomeById(Long financePlanId);
+
+    void deleteFinancePlan(FinancePlan financePlan);
 }

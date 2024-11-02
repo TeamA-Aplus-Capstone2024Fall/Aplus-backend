@@ -186,9 +186,16 @@ public class FinanceService {
         return savingGoal.getSavingGoalId();
     }
 
-    public Long updatePredictedExpense(Long roomId, Long financePlanId, FinancePlanSaveDto financePlanSaveDto) {
-        PredictedExpense predictedExpense = (PredictedExpense)financeRepository.findFinancePlanById(financePlanId);
-        predictedExpense.update(financePlanSaveDto);
-        return predictedExpense.getExpenseId();
+    @Transactional
+    public Long updatePredictedIncome(Long financePlanId, FinancePlanSaveDto financePlanSaveDto) {
+        PredictedIncome predictedIncome = financeRepository.findPredictedIncomeById(financePlanId);
+        predictedIncome.update(financePlanSaveDto);
+        return predictedIncome.getIncomeId();
+    }
+
+    @Transactional
+    public void deletePredictedIncome(Long financePlanId) {
+        PredictedIncome predictedIncome = financeRepository.findPredictedIncomeById(financePlanId);
+        financeRepository.deleteFinancePlan(predictedIncome);
     }
 }

@@ -129,12 +129,19 @@ public class FinanceController {
         return financeService.createPredictedIncome(roomId, financePlanSaveDto);
     }
 
-    // Predicted Expense 수정
-    @PutMapping("/room/{roomId}/finance/predictedExpense/{financePlanId}")
-    public Long updatePredictedExpense(@PathVariable Long roomId,
-                                       @PathVariable Long financePlanId,
-                                       @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-        return financeService.updatePredictedExpense(roomId, financePlanId, financePlanSaveDto);
+    // Predicted Income 수정
+    @PutMapping("/room/{roomId}/finance/predictedIncome/{financePlanId}")
+    public Long updatePredictedIncome(@PathVariable Long roomId,
+                                      @PathVariable Long financePlanId,
+                                      @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+        return financeService.updatePredictedIncome(financePlanId, financePlanSaveDto);
+    }
+
+    // Predicted Income 삭제
+    @DeleteMapping("/room/{roomId}/finance/predictedIncome/{financePlanId}")
+    public void deletePredictedIncome(@PathVariable Long roomId,
+                                      @PathVariable Long financePlanId) {
+        financeService.deletePredictedIncome(financePlanId);
     }
 
     // Predicted Expense 생성

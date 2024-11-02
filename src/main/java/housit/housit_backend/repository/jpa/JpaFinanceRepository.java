@@ -125,8 +125,12 @@ public class JpaFinanceRepository implements FinanceRepository {
     }
 
     @Override
-    public FinancePlan findFinancePlanById(Long financePlanId) {
-        return em.find(FinancePlan.class, financePlanId);
+    public PredictedIncome findPredictedIncomeById(Long financePlanId) {
+        return em.find(PredictedIncome.class, financePlanId);
     }
 
+    @Override
+    public void deleteFinancePlan(FinancePlan financePlan) {
+        em.remove(financePlan);
+    }
 }
