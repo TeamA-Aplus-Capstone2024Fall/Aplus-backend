@@ -1,6 +1,7 @@
 package housit.housit_backend.controller;
 
 import housit.housit_backend.domain.finance.AccountTxn;
+import housit.housit_backend.dto.reponse.ExpenseDto;
 import housit.housit_backend.dto.reponse.FinanceDto;
 import housit.housit_backend.dto.reponse.IncomeDto;
 import housit.housit_backend.dto.request.AccountSaveDto;
@@ -109,5 +110,13 @@ public class FinanceController {
                                    @RequestParam Integer year,
                                    @RequestParam Integer month) {
         return financeService.getIncomeTxns(roomId, year, month);
+    }
+
+    // Expense 로그 불러오기
+    @GetMapping("/room/{roomId}/finance/expense")
+    public ExpenseDto getExpenseTxns(@PathVariable Long roomId,
+                                     @RequestParam Integer year,
+                                     @RequestParam Integer month) {
+        return financeService.getExpenseTxns(roomId, year, month);
     }
 }

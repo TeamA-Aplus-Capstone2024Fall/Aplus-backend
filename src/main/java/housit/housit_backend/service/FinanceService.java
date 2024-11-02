@@ -4,6 +4,7 @@ import housit.housit_backend.domain.finance.Account;
 import housit.housit_backend.domain.finance.AccountTxn;
 import housit.housit_backend.domain.finance.TxnType;
 import housit.housit_backend.domain.room.Room;
+import housit.housit_backend.dto.reponse.ExpenseDto;
 import housit.housit_backend.dto.reponse.FinanceDto;
 import housit.housit_backend.dto.reponse.IncomeDto;
 import housit.housit_backend.dto.request.AccountSaveDto;
@@ -138,5 +139,16 @@ public class FinanceService {
             allTxns.addAll(financeRepository.findAllTxnsByYearMonthWithType(allAccount, year, month, TxnType.DEPOSIT));
         }
         return new IncomeDto(allTxns);
+    }
+
+    public ExpenseDto getExpenseTxns(Long roomId, Integer year, Integer month) {
+        Room room = roomRepository.findRoomById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+        List<Account> allAccounts = financeRepository.findAllAccounts(room);
+        List<AccountTxn> allTxns = new ArrayList<>();
+        for (Account allAccount : allAccounts) {
+            allTxns.addAll(financeRepository.findAllTxnsByYearMonthWithType(allAccount, year, month, TxnType.WITHDRAWAL));
+        }
+        return new ExpenseDto(allTxns);
     }
 }
