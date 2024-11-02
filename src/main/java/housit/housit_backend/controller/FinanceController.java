@@ -6,6 +6,7 @@ import housit.housit_backend.dto.reponse.FinanceDto;
 import housit.housit_backend.dto.reponse.IncomeDto;
 import housit.housit_backend.dto.request.AccountSaveDto;
 import housit.housit_backend.dto.request.AccountTxnSaveDto;
+import housit.housit_backend.dto.request.FinancePlanSaveDto;
 import housit.housit_backend.service.FinanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -121,9 +122,9 @@ public class FinanceController {
     }
 
     // Predicted Income 생성
-    @PostMapping("/room/{roomId}/finance/predictedIncome")
-    public Long createPredictedIncome(@PathVariable Long roomId,
-                                      @RequestBody AccountTxnSaveDto accountTxnSaveDto) {
-        return financeService.createPredictedIncome(roomId, accountTxnSaveDto);
-    }
+//    @PostMapping("/room/{roomId}/finance/predictedIncome")
+//    public Long createPredictedIncome(@PathVariable Long roomId,
+//                                      @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+//        return financeService.createPredictedIncome(roomId, financePlanSaveDto);
+//    }
 }

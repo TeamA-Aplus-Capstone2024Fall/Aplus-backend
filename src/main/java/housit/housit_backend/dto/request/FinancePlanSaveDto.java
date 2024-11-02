@@ -9,4 +9,5 @@ public class FinancePlanSaveDto {
     private String description;
     private Long amount;
     private LocalDate dueDate;
+    private Boolean isChecked;
 }

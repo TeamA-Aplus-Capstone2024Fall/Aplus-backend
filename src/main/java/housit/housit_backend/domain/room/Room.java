@@ -6,7 +6,6 @@ import lombok.*;
 import housit.housit_backend.domain.chore.Chore;
 import housit.housit_backend.domain.event.Event;
 import housit.housit_backend.domain.finance.Account;
-import housit.housit_backend.domain.finance.FinancePlan;
 import housit.housit_backend.domain.food.Food;
 
 import java.util.ArrayList;
@@ -35,9 +34,6 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FinancePlan> financePlans = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events = new ArrayList<>();

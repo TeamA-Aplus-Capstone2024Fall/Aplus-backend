@@ -9,6 +9,7 @@ import housit.housit_backend.dto.reponse.FinanceDto;
 import housit.housit_backend.dto.reponse.IncomeDto;
 import housit.housit_backend.dto.request.AccountSaveDto;
 import housit.housit_backend.dto.request.AccountTxnSaveDto;
+import housit.housit_backend.dto.request.FinancePlanSaveDto;
 import housit.housit_backend.repository.FinanceRepository;
 import housit.housit_backend.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -151,4 +152,7 @@ public class FinanceService {
         }
         return new ExpenseDto(allTxns);
     }
+
+//    public Long createPredictedIncome(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
+//    }
 }

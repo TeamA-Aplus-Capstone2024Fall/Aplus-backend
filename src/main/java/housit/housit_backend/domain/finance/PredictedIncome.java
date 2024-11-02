@@ -1,5 +1,6 @@
 package housit.housit_backend.domain.finance;
 
+import housit.housit_backend.domain.room.Room;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -12,13 +13,12 @@ public class PredictedIncome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long incomeId;
 
-    @ManyToOne
-    @JoinColumn(name = "financePlanId", nullable = false)
-    private FinancePlan financePlan;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roomId")
+    private Room room;
 
     private String description;
     private String amount;
     private Boolean isChecked;
     private LocalDate dueDate;
-    // Getters and Setters
 }
