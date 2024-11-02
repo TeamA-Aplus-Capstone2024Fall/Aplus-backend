@@ -20,9 +20,10 @@ public class FinanceDto {
     private List<SavingGoal> savingGoals = new ArrayList<>();
     private List<PredictedExpense> predictedExpenses = new ArrayList<>();
 
-    public FinanceDto() {
-    }
-    public FinanceDto(List<Account> accounts, Long income, Long expense, List<PredictedIncome> predictedIncomes, List<SavingGoal> savingGoals, List<PredictedExpense> predictedExpenses) {
+    public FinanceDto(List<Account> accounts, Long income, Long expense,
+                      List<PredictedIncome> predictedIncomes,
+                      List<SavingGoal> savingGoals,
+                      List<PredictedExpense> predictedExpenses) {
         this.accounts = accounts;
         this.income = income;
         this.expense = expense;

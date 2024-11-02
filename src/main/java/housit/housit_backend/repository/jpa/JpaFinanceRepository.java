@@ -1,8 +1,6 @@
 package housit.housit_backend.repository.jpa;
 
-import housit.housit_backend.domain.finance.Account;
-import housit.housit_backend.domain.finance.AccountTxn;
-import housit.housit_backend.domain.finance.TxnType;
+import housit.housit_backend.domain.finance.*;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.repository.FinanceRepository;
 import jakarta.persistence.EntityManager;
@@ -76,4 +74,59 @@ public class JpaFinanceRepository implements FinanceRepository {
                 .setParameter("type", type)
                 .getResultList();
     }
+
+    @Override
+    public void saveFinancePlan(FinancePlan financePlan) {
+        em.persist(financePlan);
+    }
+
+    @Override
+    public List<PredictedIncome> findAllPredictedIncomesByDate(Room room, Integer year, Integer month) {
+        return em.createQuery("select pi from PredictedIncome pi where pi.room =: room " +
+                        "and year(pi.enrolledDate) =: year and month(pi.enrolledDate) =: month", PredictedIncome.class)
+                .setParameter("room", room)
+                .setParameter("year", year)
+                .setParameter("month", month)
+                .getResultList();
+    }
+
+    @Override
+    public List<PredictedExpense> findAllPredictedExpensesByDate(Room room, Integer year, Integer month) {
+        return em.createQuery("select pe from PredictedExpense pe where pe.room =: room " +
+                        "and year(pe.enrolledDate) =: year and month(pe.enrolledDate) =: month", PredictedExpense.class)
+                .setParameter("room", room)
+                .setParameter("year", year)
+                .setParameter("month", month)
+                .getResultList();
+    }
+
+    @Override
+    public List<SavingGoal> findAllSavingGoalsByDate(Room room, Integer year, Integer month) {
+        return em.createQuery("select sg from SavingGoal sg where sg.room =: room " +
+                        "and year(sg.enrolledDate) =: year and month(sg.enrolledDate) =: month", SavingGoal.class)
+                .setParameter("room", room)
+                .setParameter("year", year)
+                .setParameter("month", month)
+                .getResultList();
+    }
+
+    @Override
+    public Long findTotalSumByDate(List<Account> allAccounts, Room room, Integer year, Integer month, TxnType txnType) {
+        Long amount = em.createQuery("select sum(at.amount) from AccountTxn at where at.account in :accounts " +
+                        "and year(at.txnDate) =: year and month(at.txnDate) =: month " +
+                        "and at.txnType =: type", Long.class)
+                .setParameter("accounts", allAccounts)
+                .setParameter("year", year)
+                .setParameter("month", month)
+                .setParameter("type", txnType)
+                .getSingleResult();
+        if(amount == null) amount = 0L;
+        return amount;
+    }
+
+    @Override
+    public FinancePlan findFinancePlanById(Long financePlanId) {
+        return em.find(FinancePlan.class, financePlanId);
+    }
+
 }

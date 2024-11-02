@@ -1,8 +1,6 @@
 package housit.housit_backend.service;
 
-import housit.housit_backend.domain.finance.Account;
-import housit.housit_backend.domain.finance.AccountTxn;
-import housit.housit_backend.domain.finance.TxnType;
+import housit.housit_backend.domain.finance.*;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.ExpenseDto;
 import housit.housit_backend.dto.reponse.FinanceDto;
@@ -29,10 +27,18 @@ public class FinanceService {
     public FinanceDto getFinanceInfo(Long roomId, Integer year, Integer month) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        List<PredictedIncome> predictedIncomes = financeRepository.findAllPredictedIncomesByDate(room, year, month);
+        List<PredictedExpense> predictedExpenses = financeRepository.findAllPredictedExpensesByDate(room, year, month);
+        List<SavingGoal> savingGoals = financeRepository.findAllSavingGoalsByDate(room, year, month);
+
         List<Account> allAccounts = financeRepository.findAllAccounts(room);
-        FinanceDto financeDto = new FinanceDto();
-        financeDto.setAccounts(allAccounts);
-        return financeDto;
+        Long income = 0L;
+        Long expense = 0L;
+        income += financeRepository.findTotalSumByDate(allAccounts, room, year, month, TxnType.DEPOSIT);
+        expense = financeRepository.findTotalSumByDate(allAccounts, room, year, month, TxnType.WITHDRAWAL);
+        return new FinanceDto(allAccounts, income, expense,
+                predictedIncomes, savingGoals, predictedExpenses);
     }
 
     @Transactional
@@ -153,10 +159,36 @@ public class FinanceService {
         return new ExpenseDto(allTxns);
     }
 
+    @Transactional
     public Long createPredictedIncome(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+        PredictedIncome predictedIncome = PredictedIncome.createPredictedIncome(financePlanSaveDto, room);
+        financeRepository.saveFinancePlan(predictedIncome);
+        return predictedIncome.getIncomeId();
+    }
 
-        return null;
+    @Transactional
+    public Long createPredictedExpense(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
+        Room room = roomRepository.findRoomById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+        PredictedExpense predictedExpense = PredictedExpense.createPredictedExpense(financePlanSaveDto, room);
+        financeRepository.saveFinancePlan(predictedExpense);
+        return predictedExpense.getExpenseId();
+    }
+
+    @Transactional
+    public Long createSavingGoal(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
+        Room room = roomRepository.findRoomById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+        SavingGoal savingGoal = SavingGoal.createSavingGoal(financePlanSaveDto, room);
+        financeRepository.saveFinancePlan(savingGoal);
+        return savingGoal.getSavingGoalId();
+    }
+
+    public Long updatePredictedExpense(Long roomId, Long financePlanId, FinancePlanSaveDto financePlanSaveDto) {
+        PredictedExpense predictedExpense = (PredictedExpense)financeRepository.findFinancePlanById(financePlanId);
+        predictedExpense.update(financePlanSaveDto);
+        return predictedExpense.getExpenseId();
     }
 }

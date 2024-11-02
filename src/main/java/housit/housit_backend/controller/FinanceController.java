@@ -20,6 +20,7 @@ import java.util.List;
 public class FinanceController {
     public final FinanceService financeService;
 
+    // 전쳬 재정 정보 불러오기
     @GetMapping("/room/{roomId}/finance")
     public FinanceDto getFinance(@PathVariable Long roomId,
                                  @RequestParam Integer year,
@@ -126,5 +127,27 @@ public class FinanceController {
     public Long createPredictedIncome(@PathVariable Long roomId,
                                       @RequestBody FinancePlanSaveDto financePlanSaveDto) {
         return financeService.createPredictedIncome(roomId, financePlanSaveDto);
+    }
+
+    // Predicted Expense 수정
+    @PutMapping("/room/{roomId}/finance/predictedExpense/{financePlanId}")
+    public Long updatePredictedExpense(@PathVariable Long roomId,
+                                       @PathVariable Long financePlanId,
+                                       @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+        return financeService.updatePredictedExpense(roomId, financePlanId, financePlanSaveDto);
+    }
+
+    // Predicted Expense 생성
+    @PostMapping("/room/{roomId}/finance/predictedExpense")
+    public Long createPredictedExpense(@PathVariable Long roomId,
+                                       @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+        return financeService.createPredictedExpense(roomId, financePlanSaveDto);
+    }
+
+    // Saving Goal 생성
+    @PostMapping("/room/{roomId}/finance/savingGoal")
+    public Long createSavingGoal(@PathVariable Long roomId,
+                                 @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+        return financeService.createSavingGoal(roomId, financePlanSaveDto);
     }
 }
