@@ -153,6 +153,10 @@ public class FinanceService {
         return new ExpenseDto(allTxns);
     }
 
-//    public Long createPredictedIncome(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
-//    }
+    public Long createPredictedIncome(Long roomId, FinancePlanSaveDto financePlanSaveDto) {
+        Room room = roomRepository.findRoomById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        return null;
+    }
 }

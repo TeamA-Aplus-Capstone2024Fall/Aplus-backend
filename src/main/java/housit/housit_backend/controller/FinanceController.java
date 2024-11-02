@@ -122,9 +122,9 @@ public class FinanceController {
     }
 
     // Predicted Income 생성
-//    @PostMapping("/room/{roomId}/finance/predictedIncome")
-//    public Long createPredictedIncome(@PathVariable Long roomId,
-//                                      @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-//        return financeService.createPredictedIncome(roomId, financePlanSaveDto);
-//    }
+    @PostMapping("/room/{roomId}/finance/predictedIncome")
+    public Long createPredictedIncome(@PathVariable Long roomId,
+                                      @RequestBody FinancePlanSaveDto financePlanSaveDto) {
+        return financeService.createPredictedIncome(roomId, financePlanSaveDto);
+    }
 }

@@ -18,7 +18,7 @@ public class PredictedIncome {
     private Room room;
 
     private String description;
-    private String amount;
+    private Long amount;
     private Boolean isChecked;
     private LocalDate dueDate;
 }
