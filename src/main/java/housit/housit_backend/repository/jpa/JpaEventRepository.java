@@ -2,12 +2,15 @@ package housit.housit_backend.repository.jpa;
 
 import housit.housit_backend.domain.event.Event;
 import housit.housit_backend.domain.event.EventMember;
+import housit.housit_backend.domain.finance.PredictedIncome;
 import housit.housit_backend.domain.room.Room;
+import housit.housit_backend.dto.reponse.EventDto;
 import housit.housit_backend.repository.EventRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -41,6 +44,18 @@ public class JpaEventRepository implements EventRepository {
     public List<EventMember> findAllWithMembers(Event event) {
         return em.createQuery("select em from EventMember em where em.event =: event", EventMember.class)
                 .setParameter("event", event)
+                .getResultList();
+    }
+
+    @Override
+    public List<Event> getSoonEvents(Long roomId, int days) {
+        // 현재 날짜에 days를 더한 날짜를 계산합니다.
+        LocalDate expirationThreshold = LocalDate.now().plusDays(days);
+
+        return em.createQuery("select e from Event e where e.room.roomId = :roomId " +
+                        "and e.eventDay between current_date and :expirationThreshold", Event.class)
+                .setParameter("roomId", roomId)
+                .setParameter("expirationThreshold", expirationThreshold)  // 미리 계산한 날짜를 사용
                 .getResultList();
     }
 }

@@ -1,5 +1,6 @@
 package housit.housit_backend.controller;
 
+import housit.housit_backend.dto.reponse.HomeDto;
 import housit.housit_backend.dto.reponse.RoomCreateResponseDto;
 import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.reponse.RoomDto;
@@ -20,21 +21,14 @@ import java.util.List;
 public class RoomController {
     private final RoomService roomService;
 
+    @GetMapping("/room")
+    public List<RoomDto> getRooms(Pageable pageable) {
+        return roomService.getRoomsWithMembers(pageable);
+    }
+
     @PostMapping("/room")
     public RoomCreateResponseDto createRoom(@RequestBody RoomSaveDto roomSaveDto) {
         return roomService.createRoom(roomSaveDto);
-    }
-
-    @GetMapping("/room/{roomId}")
-    public ResponseEntity<List<MemberDto>> enterRoom(@PathVariable("roomId") Long roomId, @RequestParam String roomPassword) {
-        // 방 비밀번호 검증 실패 시 403 응답 반환
-        if(!roomService.validateRoomPassword(roomId, roomPassword)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null); // 비어있는 body로 403 Forbidden 반환
-        }
-
-        List<MemberDto> members = roomService.getMembers(roomId);
-        return ResponseEntity.ok(members);
     }
 
     @DeleteMapping("/room/{roomId}")
@@ -48,8 +42,8 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/room")
-    public List<RoomDto> getRooms(Pageable pageable) {
-        return roomService.getRoomsWithMembers(pageable);
+    @GetMapping("/room/{roomId}/home")
+    public HomeDto getHome(@PathVariable("roomId") Long roomId) {
+        return roomService.getHome(roomId);
     }
 }

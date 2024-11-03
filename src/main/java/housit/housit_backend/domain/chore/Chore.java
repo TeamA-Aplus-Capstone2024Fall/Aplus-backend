@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import housit.housit_backend.domain.room.Room;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class Chore {
     @Enumerated(EnumType.STRING)
     private ChoreDay choreDay;  // 청소 요일 (Nullable)
     private Integer choreFrequency;  // 청소 주기 (예: 주 1회)
+    private LocalDate enrolledDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roomId", nullable = false)
@@ -45,6 +47,7 @@ public class Chore {
         chore.icon = choreSaveDto.getIcon();
         chore.choreDay = choreSaveDto.getChoreDay();
         chore.choreFrequency = choreSaveDto.getChoreFrequency();
+        chore.enrolledDate = choreSaveDto.getEnrolledDate();
         chore.room = room;
         chore.choreMembers = choreMembers;
         for(ChoreMember choreMember : choreMembers) {
@@ -60,7 +63,7 @@ public class Chore {
         this.icon = choreSaveDto.getIcon();
         this.choreDay = choreSaveDto.getChoreDay();
         this.choreFrequency = choreSaveDto.getChoreFrequency();
-
+        this.enrolledDate = choreSaveDto.getEnrolledDate();
         this.choreMembers.clear();
         this.choreMembers.addAll(newMembers);
 

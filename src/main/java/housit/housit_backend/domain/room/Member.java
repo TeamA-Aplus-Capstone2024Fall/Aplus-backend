@@ -3,6 +3,7 @@ package housit.housit_backend.domain.room;
 import housit.housit_backend.domain.chore.ChoreMember;
 import housit.housit_backend.domain.event.EventMember;
 import housit.housit_backend.dto.request.MemberSaveDto;
+import housit.housit_backend.dto.request.MemberSettingSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,12 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<EventMember> eventMembers = new ArrayList<>();
 
+    private Integer foodDays;
+    private Integer financeDays;
+    //private Integer choreDays;
+    private Integer eventDays;
+    private Integer minimumFoodQuantity;
+
     public Boolean validatePassword(String memberPassword) {
         return this.memberPassword.equals(memberPassword);
     }
@@ -44,6 +51,11 @@ public class Member {
                 .memberPassword(memberSaveDto.getMemberPassword())
                 .memberIcon(memberSaveDto.getMemberIcon())
                 .room(room)
+                .foodDays(7)
+                .financeDays(7)
+                //.choreDays(7)
+                .eventDays(7)
+                .minimumFoodQuantity(1)
                 .build();
     }
 
@@ -51,5 +63,13 @@ public class Member {
         this.memberName = memberName;
         this.memberPassword = memberPassword;
         this.memberIcon = memberIcon;
+    }
+
+    public void updateMemberSetting(MemberSettingSaveDto memberSettingSaveDto) {
+        this.foodDays = memberSettingSaveDto.getFoodDays();
+        this.financeDays = memberSettingSaveDto.getFinanceDays();
+        //this.choreDays = memberSettingSaveDto.getChoreDays();
+        this.eventDays = memberSettingSaveDto.getEventDays();
+        this.minimumFoodQuantity = memberSettingSaveDto.getMinimumFoodQuantity();
     }
 }

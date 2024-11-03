@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -91,6 +92,19 @@ public class JpaFinanceRepository implements FinanceRepository {
     }
 
     @Override
+    public List<PredictedIncome> findSoonPredictedIncomes(Room room, Integer days) {
+        // 현재 날짜에 days를 더한 날짜를 계산합니다.
+        LocalDate expirationThreshold = LocalDate.now().plusDays(days);
+
+        return em.createQuery("select pi from PredictedIncome pi where pi.room = :room " +
+                        "and pi.enrolledDate between current_date and :expirationThreshold", PredictedIncome.class)
+                .setParameter("room", room)
+                .setParameter("expirationThreshold", expirationThreshold)  // 미리 계산한 날짜를 사용
+                .getResultList();
+    }
+
+
+    @Override
     public List<PredictedExpense> findAllPredictedExpensesByDate(Room room, Integer year, Integer month) {
         return em.createQuery("select pe from PredictedExpense pe where pe.room =: room " +
                         "and year(pe.enrolledDate) =: year and month(pe.enrolledDate) =: month", PredictedExpense.class)
@@ -101,12 +115,34 @@ public class JpaFinanceRepository implements FinanceRepository {
     }
 
     @Override
+    public List<PredictedExpense> findSoonPredictedExpenses(Room room, Integer days) {
+        LocalDate expirationThreshold = LocalDate.now().plusDays(days);
+
+        return em.createQuery("select pe from PredictedExpense pe where pe.room = :room " +
+                        "and pe.enrolledDate between current_date and :expirationThreshold", PredictedExpense.class)
+                .setParameter("room", room)
+                .setParameter("expirationThreshold", expirationThreshold)
+                .getResultList();
+    }
+
+    @Override
     public List<SavingGoal> findAllSavingGoalsByDate(Room room, Integer year, Integer month) {
         return em.createQuery("select sg from SavingGoal sg where sg.room =: room " +
                         "and year(sg.enrolledDate) =: year and month(sg.enrolledDate) =: month", SavingGoal.class)
                 .setParameter("room", room)
                 .setParameter("year", year)
                 .setParameter("month", month)
+                .getResultList();
+    }
+
+    @Override
+    public List<SavingGoal> findSoonSavingGoals(Room room, Integer days) {
+        LocalDate expirationThreshold = LocalDate.now().plusDays(days);
+
+        return em.createQuery("select sg from SavingGoal sg where sg.room = :room " +
+                        "and sg.enrolledDate between current_date and :expirationThreshold", SavingGoal.class)
+                .setParameter("room", room)
+                .setParameter("expirationThreshold", expirationThreshold)
                 .getResultList();
     }
 

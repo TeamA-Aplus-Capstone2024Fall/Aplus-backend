@@ -24,9 +24,15 @@ public interface FinanceRepository {
 
     List<PredictedIncome> findAllPredictedIncomesByDate(Room room, Integer year, Integer month);
 
+    List<PredictedIncome> findSoonPredictedIncomes(Room room, Integer days);
+
     List<PredictedExpense> findAllPredictedExpensesByDate(Room room, Integer year, Integer month);
 
+    List<PredictedExpense> findSoonPredictedExpenses(Room room, Integer days);
+
     List<SavingGoal> findAllSavingGoalsByDate(Room room, Integer year, Integer month);
+
+    List<SavingGoal> findSoonSavingGoals(Room room, Integer days);
 
     Long findTotalSumByDate(List<Account> allAccounts, Room room, Integer year, Integer month, TxnType txnType);
 

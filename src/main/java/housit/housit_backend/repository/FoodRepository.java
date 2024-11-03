@@ -11,4 +11,7 @@ public interface FoodRepository {
     Optional<Food> findFoodById(Long foodId);
     void deleteFood(Long foodId);
     List<Food> getAllFoods(Long roomId);
+
+    List<Food> getExpiringSoonFoods(Long roomId, Integer days);
+    List<Food> getOutOfFavoriteFoods(Long roomId, Integer minimumQuantity);
 }

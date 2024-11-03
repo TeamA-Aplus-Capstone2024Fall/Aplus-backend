@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,26 @@ public class JpaFoodRepository implements FoodRepository {
                         "WHEN 'roomTemperature' THEN 3 " +
                         "END, f.expirationDate", Food.class)  // room의 id를 조건으로 조회
                 .setParameter("roomId", roomId)  // 파라미터 바인딩
+                .getResultList();
+    }
+
+    @Override
+    public List<Food> getExpiringSoonFoods(Long roomId, Integer days) {
+        // 현재 날짜에 days를 더해서 만료 기준 날짜를 계산합니다.
+        LocalDate expirationThreshold = LocalDate.now().plusDays(days);
+
+        return em.createQuery("SELECT f FROM Food f WHERE f.room.id = :roomId " +
+                        "AND f.expirationDate <= :expirationThreshold", Food.class)
+                .setParameter("roomId", roomId)
+                .setParameter("expirationThreshold", expirationThreshold)  // 계산된 날짜를 전달
+                .getResultList();
+    }
+    
+    @Override
+    public List<Food> getOutOfFavoriteFoods(Long roomId, Integer minimumQuantity) {
+        return em.createQuery("SELECT f FROM Food f WHERE f.room.id = :roomId AND f.isFavorite = true AND f.quantity <= :minimumQuantity", Food.class)
+                .setParameter("roomId", roomId)
+                .setParameter("minimumQuantity", minimumQuantity)
                 .getResultList();
     }
 }
