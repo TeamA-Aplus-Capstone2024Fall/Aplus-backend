@@ -20,6 +20,7 @@ public class MemberController {
     private final RoomService roomService;
     private final JwtUtil jwtUtil;
 
+    // 토큰 X, 대신 roomPasssword 필요
     @GetMapping("/room/{roomId}/member")
     public ResponseEntity<List<MemberDto>> enterRoom(@PathVariable("roomId") Long roomId, @RequestParam String roomPassword) {
         // 방 비밀번호 검증 실패 시 403 응답 반환
@@ -32,12 +33,14 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
 
+    // 토큰 X 대신 roomPassword 필요
     @PostMapping("/room/{roomId}/member")
     public MemberDto createMember(@PathVariable("roomId") Long roomId,
                                   @RequestBody MemberSaveDto memberSaveDto) {
         return roomService.createMember(roomId, memberSaveDto);
     }
 
+    // 토큰 X 대신 memberPassword 필요
     @DeleteMapping("/room/{roomId}/member/{memberId}")
     public ResponseEntity<Void> deleteMember(@PathVariable("roomId") Long roomId,
                                              @PathVariable("memberId") Long memberId,
@@ -50,6 +53,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // 토큰 X 대신 memberPassword 필요
     @PutMapping("/room/{roomId}/member/{memberId}")
     public MemberDto updateMember(@PathVariable("roomId") Long roomId,
                                   @PathVariable("memberId") Long memberId,
@@ -57,6 +61,7 @@ public class MemberController {
         return roomService.updateMember(memberId, memberSaveDto);
     }
 
+    // 토큰 X, 토큰 발급
     @GetMapping("/room/{roomId}/member/{memberId}/join")
     public void joinRoom(@PathVariable("roomId") Long roomId,
                          @PathVariable("memberId") Long memberId) {
