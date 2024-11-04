@@ -21,6 +21,8 @@ public class Member {
     private Long memberId;
     private String memberName;
     private String memberPassword;
+    private Boolean hasPassword; // 프론트에서 hasPassword 가 true 면 비밀번호 입력창을 띄워주도록 하기 위함
+    private String roles;
 
     @Enumerated(EnumType.STRING)
     private MemberIcon memberIcon;

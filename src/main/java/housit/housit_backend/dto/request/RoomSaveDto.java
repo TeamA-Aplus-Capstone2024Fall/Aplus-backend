@@ -21,11 +21,12 @@ public class RoomSaveDto {
                 .build();
     }
 
-    public Member toMemberEntity(Room room) {
+    public Member toMasterMemberEntity(Room room) {
         return Member.builder()
                 .memberName(masterMemberName)
                 .memberPassword(masterMemberPassword)
                 .room(room)
+                .roles("MASTER")
                 .build();
     }
 }

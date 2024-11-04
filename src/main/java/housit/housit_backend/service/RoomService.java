@@ -38,7 +38,7 @@ public class RoomService {
         Room createdRoom = roomSaveDto.toRoomEntity();
         roomRepository.saveRoom(createdRoom);
 
-        Member masterMember = roomSaveDto.toMemberEntity(createdRoom);
+        Member masterMember = roomSaveDto.toMasterMemberEntity(createdRoom);
         memberRepository.saveMember(masterMember);
 
         createdRoom.initializeMasterMemberRoomId(masterMember.getMemberId());

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -33,9 +34,11 @@ public class RoomController {
         return roomService.createRoom(roomSaveDto);
     }
 
-    // 토큰 X
+    // roomPassword 필요
     @DeleteMapping("/room/{roomId}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long roomId, @RequestParam String roomPassword) {
+    public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long roomId,
+                                           @RequestBody Map<String, Object> data) {
+        String roomPassword = (String) data.get("roomPassword");
         // 비밀번호 검증 실패 시 403 Forbidden 응답 반환
         if (!roomService.validateRoomPassword(roomId, roomPassword)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -45,7 +48,7 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // 토큰 필요
+    // Room 토큰 필요, Member 토큰 필요
     @GetMapping("/room/{roomId}/home")
     public HomeDto getHome(@PathVariable("roomId") Long roomId) {
         return roomService.getHome(roomId);

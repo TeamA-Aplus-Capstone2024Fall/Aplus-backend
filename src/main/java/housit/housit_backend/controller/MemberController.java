@@ -3,7 +3,6 @@ package housit.housit_backend.controller;
 import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.request.MemberSaveDto;
 import housit.housit_backend.dto.request.MemberDeleteDto;
-import housit.housit_backend.security.JwtUtil;
 import housit.housit_backend.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +17,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberController {
     private final RoomService roomService;
-    private final JwtUtil jwtUtil;
 
-    // 토큰 X, 대신 roomPasssword 필요
+    // roomPassword 필요
     @GetMapping("/room/{roomId}/member")
-    public ResponseEntity<List<MemberDto>> enterRoom(@PathVariable("roomId") Long roomId, @RequestParam String roomPassword) {
+    public ResponseEntity<List<MemberDto>> enterRoom(@PathVariable("roomId") Long roomId,
+                                                     @RequestBody Map<String, Object> data) {
+        String roomPassword = (String) data.get("roomPassword");
         // 방 비밀번호 검증 실패 시 403 응답 반환
         if(!roomService.validateRoomPassword(roomId, roomPassword)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -33,27 +33,29 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
 
-    // 토큰 X 대신 roomPassword 필요
+    // Room 토큰 필요
     @PostMapping("/room/{roomId}/member")
     public MemberDto createMember(@PathVariable("roomId") Long roomId,
                                   @RequestBody MemberSaveDto memberSaveDto) {
         return roomService.createMember(roomId, memberSaveDto);
     }
 
-    // 토큰 X 대신 memberPassword 필요
+    // Room 토큰 필요, memberPassword 필요
     @DeleteMapping("/room/{roomId}/member/{memberId}")
     public ResponseEntity<Void> deleteMember(@PathVariable("roomId") Long roomId,
                                              @PathVariable("memberId") Long memberId,
-                                             @RequestBody MemberDeleteDto memberDeleteDto) {
+                                             @RequestBody Map<String, Object> data) {
+        String memberPassword = (String) data.get("memberPassword");
+
         // 비밀번호 검증 실패 시 403 Forbidden 응답 반환
-        if (!roomService.validateMemberPassword(memberId, memberDeleteDto.getMemberPassword())) {
+        if (!roomService.validateMemberPassword(memberId, memberPassword)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         roomService.deleteMember(memberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // 토큰 X 대신 memberPassword 필요
+    // Room 토큰 필요, memberPassword 필요
     @PutMapping("/room/{roomId}/member/{memberId}")
     public MemberDto updateMember(@PathVariable("roomId") Long roomId,
                                   @PathVariable("memberId") Long memberId,
@@ -61,16 +63,10 @@ public class MemberController {
         return roomService.updateMember(memberId, memberSaveDto);
     }
 
-    // 토큰 X, 토큰 발급
-    @GetMapping("/room/{roomId}/member/{memberId}/join")
+    // Room 토큰 필요, Member 토큰 발급
+    @GetMapping("/room/{roomId}/member/{memberId}/login")
     public void joinRoom(@PathVariable("roomId") Long roomId,
                          @PathVariable("memberId") Long memberId) {
 
-        String accessToken = jwtUtil.generateAccessToken(roomId, memberId);
-        String refreshToken = jwtUtil.generateRefreshToken(roomId, memberId);
-
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
     }
 }
