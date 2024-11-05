@@ -6,6 +6,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.List;
+
 @Configuration
 public class CorsConfig {
     @Bean
@@ -15,7 +17,8 @@ public class CorsConfig {
         config.setAllowCredentials(true); // 자격 증명 허용 (쿠키, Authorization 헤더 등)
         config.addAllowedOriginPattern("*"); // 모든 도메인 허용
         config.addAllowedHeader("*"); // 모든 헤더 허용
-        config.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")); // 이 방식으로 매핑해줘야 한다
+        //config.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
         source.registerCorsConfiguration("/**", config); // 모든 경로에 대해 위 설정 적용
         return new CorsFilter(source); // source 전달하여 CorsFilter 생성
     }
