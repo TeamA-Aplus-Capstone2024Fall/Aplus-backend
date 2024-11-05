@@ -16,10 +16,9 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // 자격 증명 허용 (쿠키, Authorization 헤더 등)
-        config.addAllowedOriginPattern("*"); // 모든 도메인 허용
         config.addAllowedHeader("*"); // 모든 헤더 허용
         config.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
-        config.addAllowedOrigin("*");
+        config.addAllowedOriginPattern("*"); // 모든 도메인 허용
         source.registerCorsConfiguration("/**", config); // 모든 경로에 대해 위 설정 적용
         return new CorsFilter(source); // source 전달하여 CorsFilter 생성
     }
