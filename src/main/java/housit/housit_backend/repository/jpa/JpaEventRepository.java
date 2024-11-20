@@ -48,14 +48,21 @@ public class JpaEventRepository implements EventRepository {
     }
 
     @Override
-    public List<Event> getSoonEvents(Long roomId, int days) {
+    public List<Event> getSoonEvents(Long roomId, int days, Long memberId) {
         // 현재 날짜에 days를 더한 날짜를 계산합니다.
         LocalDate expirationThreshold = LocalDate.now().plusDays(days);
 
-        return em.createQuery("select e from Event e where e.room.roomId = :roomId " +
-                        "and e.eventDay between current_date and :expirationThreshold", Event.class)
+        return em.createQuery(
+                        "SELECT DISTINCT e FROM Event e " +
+                                "JOIN e.eventMembers em " +
+                                "WHERE e.room.roomId = :roomId " +
+                                "AND e.eventDay BETWEEN CURRENT_DATE AND :expirationThreshold " +
+                                "AND em.member.memberId = :memberId " +
+                                "ORDER BY e.eventDay ASC", Event.class)
                 .setParameter("roomId", roomId)
-                .setParameter("expirationThreshold", expirationThreshold)  // 미리 계산한 날짜를 사용
+                .setParameter("expirationThreshold", expirationThreshold)
+                .setParameter("memberId", memberId)
                 .getResultList();
+
     }
 }

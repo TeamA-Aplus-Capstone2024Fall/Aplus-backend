@@ -84,7 +84,7 @@ public class JpaFinanceRepository implements FinanceRepository {
     @Override
     public List<PredictedIncome> findAllPredictedIncomesByDate(Room room, Integer year, Integer month) {
         return em.createQuery("select pi from PredictedIncome pi where pi.room =: room " +
-                        "and year(pi.enrolledDate) =: year and month(pi.enrolledDate) =: month", PredictedIncome.class)
+                        "and year(pi.dueDate) =: year and month(pi.dueDate) =: month", PredictedIncome.class)
                 .setParameter("room", room)
                 .setParameter("year", year)
                 .setParameter("month", month)
@@ -97,7 +97,7 @@ public class JpaFinanceRepository implements FinanceRepository {
         LocalDate expirationThreshold = LocalDate.now().plusDays(days);
 
         return em.createQuery("select pi from PredictedIncome pi where pi.room = :room " +
-                        "and pi.enrolledDate between current_date and :expirationThreshold", PredictedIncome.class)
+                        "and pi.dueDate between current_date and :expirationThreshold", PredictedIncome.class)
                 .setParameter("room", room)
                 .setParameter("expirationThreshold", expirationThreshold)  // 미리 계산한 날짜를 사용
                 .getResultList();
@@ -107,7 +107,7 @@ public class JpaFinanceRepository implements FinanceRepository {
     @Override
     public List<PredictedExpense> findAllPredictedExpensesByDate(Room room, Integer year, Integer month) {
         return em.createQuery("select pe from PredictedExpense pe where pe.room =: room " +
-                        "and year(pe.enrolledDate) =: year and month(pe.enrolledDate) =: month", PredictedExpense.class)
+                        "and year(pe.dueDate) =: year and month(pe.dueDate) =: month", PredictedExpense.class)
                 .setParameter("room", room)
                 .setParameter("year", year)
                 .setParameter("month", month)
@@ -119,7 +119,7 @@ public class JpaFinanceRepository implements FinanceRepository {
         LocalDate expirationThreshold = LocalDate.now().plusDays(days);
 
         return em.createQuery("select pe from PredictedExpense pe where pe.room = :room " +
-                        "and pe.enrolledDate between current_date and :expirationThreshold", PredictedExpense.class)
+                        "and pe.dueDate between current_date and :expirationThreshold", PredictedExpense.class)
                 .setParameter("room", room)
                 .setParameter("expirationThreshold", expirationThreshold)
                 .getResultList();
@@ -128,7 +128,7 @@ public class JpaFinanceRepository implements FinanceRepository {
     @Override
     public List<SavingGoal> findAllSavingGoalsByDate(Room room, Integer year, Integer month) {
         return em.createQuery("select sg from SavingGoal sg where sg.room =: room " +
-                        "and year(sg.enrolledDate) =: year and month(sg.enrolledDate) =: month", SavingGoal.class)
+                        "and year(sg.dueDate) =: year and month(sg.dueDate) =: month", SavingGoal.class)
                 .setParameter("room", room)
                 .setParameter("year", year)
                 .setParameter("month", month)
@@ -140,7 +140,7 @@ public class JpaFinanceRepository implements FinanceRepository {
         LocalDate expirationThreshold = LocalDate.now().plusDays(days);
 
         return em.createQuery("select sg from SavingGoal sg where sg.room = :room " +
-                        "and sg.enrolledDate between current_date and :expirationThreshold", SavingGoal.class)
+                        "and sg.dueDate between current_date and :expirationThreshold", SavingGoal.class)
                 .setParameter("room", room)
                 .setParameter("expirationThreshold", expirationThreshold)
                 .getResultList();

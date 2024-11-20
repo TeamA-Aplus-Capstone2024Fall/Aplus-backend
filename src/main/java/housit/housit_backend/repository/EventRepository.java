@@ -14,5 +14,5 @@ public interface EventRepository {
     List<Event> findAll(Room room);
     List<EventMember> findAllWithMembers(Event event);
 
-    List<Event> getSoonEvents(Long roomId, int days);
+    List<Event> getSoonEvents(Long roomId, int days, Long memberId);
 }

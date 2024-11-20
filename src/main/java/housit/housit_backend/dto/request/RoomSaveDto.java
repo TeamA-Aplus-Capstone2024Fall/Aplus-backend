@@ -25,6 +25,11 @@ public class RoomSaveDto {
         return Member.builder()
                 .memberName(masterMemberName)
                 .memberPassword(masterMemberPassword)
+                .foodDays(7)
+                .financeDays(7)
+                .choreDays(7)
+                .eventDays(7)
+                .minimumFoodQuantity(1)
                 .room(room)
                 .roles("MASTER")
                 .build();

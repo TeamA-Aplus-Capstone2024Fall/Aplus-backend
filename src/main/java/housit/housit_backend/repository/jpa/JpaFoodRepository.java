@@ -49,6 +49,8 @@ public class JpaFoodRepository implements FoodRepository {
     public List<Food> getExpiringSoonFoods(Long roomId, Integer days) {
         // 현재 날짜에 days를 더해서 만료 기준 날짜를 계산합니다.
         LocalDate expirationThreshold = LocalDate.now().plusDays(days);
+        System.out.println("expirationThreshold = " + expirationThreshold);
+        System.out.println("LocalDate.now() = " + LocalDate.now());
 
         return em.createQuery("SELECT f FROM Food f WHERE f.room.id = :roomId " +
                         "AND f.expirationDate <= :expirationThreshold", Food.class)

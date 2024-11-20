@@ -35,4 +35,16 @@ public class JpaChoreRepository implements ChoreRepository {
                 .setParameter("room", room)
                 .getResultList();
     }
+
+    @Override
+    public List<Chore> getSoonChores(Long roomId, Integer choreDays, Long memberId) {
+        return em.createQuery(
+                        "SELECT c FROM Chore c " +
+                                "JOIN c.choreMembers cm " +
+                                "WHERE c.room.roomId = :roomId " +
+                                "AND cm.member.memberId = :memberId", Chore.class)
+                .setParameter("roomId", roomId)
+                .setParameter("memberId", memberId)
+                .getResultList();
+    }
 }

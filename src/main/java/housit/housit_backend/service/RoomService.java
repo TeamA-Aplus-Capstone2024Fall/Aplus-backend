@@ -1,5 +1,6 @@
 package housit.housit_backend.service;
 
+import housit.housit_backend.domain.chore.Chore;
 import housit.housit_backend.domain.event.Event;
 import housit.housit_backend.domain.finance.PredictedExpense;
 import housit.housit_backend.domain.finance.PredictedIncome;
@@ -18,7 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -131,7 +135,9 @@ public class RoomService {
         List<PredictedIncome> predictedIncomes = financeRepository.findSoonPredictedIncomes(room, member.getFinanceDays());
         List<PredictedExpense> predictedExpenses = financeRepository.findSoonPredictedExpenses(room, member.getFinanceDays());
         List<SavingGoal> savingGoals = financeRepository.findSoonSavingGoals(room, member.getFinanceDays());
-        List<Event> events = eventRepository.getSoonEvents(roomId, member.getEventDays());
+        List<Event> events = eventRepository.getSoonEvents(roomId, member.getEventDays(), member.getMemberId());
+        List<Chore> chores = choreRepository.getSoonChores(roomId, member.getChoreDays(), member.getMemberId());
+        List<Chore> soonChores = filterSoonChores(chores, member.getChoreDays());
 
         // expiringSoonFoods를 expiringSoonFoodsDto로 변환
         // outOfFavoriteFoods를 outOfFavoriteFoodsDto로 변환
@@ -139,13 +145,14 @@ public class RoomService {
         List<FoodDto> expiringSoonFoodsDto = expiringSoonFoods.stream().map(FoodDto::entityToDto).collect(Collectors.toList());
         List<FoodDto> outOfFavoriteFoodsDto = outOfFavoriteFoods.stream().map(FoodDto::entityToDto).collect(Collectors.toList());
         List<EventDto> eventDtos = events.stream().map(EventDto::entityToDto).collect(Collectors.toList());
+        List<ChoreDto> choreDtos = soonChores.stream().map(ChoreDto::entityToDto).toList();
 
         return new HomeDto(expiringSoonFoodsDto,
                 outOfFavoriteFoodsDto,
                 predictedIncomes,
                 savingGoals,
                 predictedExpenses,
-                new ArrayList<>(), // 임시로 비워둠
+                choreDtos,
                 eventDtos);
     }
 
@@ -163,5 +170,36 @@ public class RoomService {
             return MemberDto.entityToDto(member);
         }
         return null;
+    }
+
+    private LocalDate calculateClosestChoreDate(LocalDate enrolledDate, Integer choreFrequency) {
+        if (choreFrequency == null || choreFrequency <= 0) return null; // Frequency가 없거나 비정상적인 경우 제외
+
+        LocalDate today = LocalDate.now();
+        long daysSinceEnrolled = ChronoUnit.DAYS.between(enrolledDate, today);
+
+        if (daysSinceEnrolled < 0) {
+            // 아직 시작되지 않은 경우, 바로 enrolledDate 반환
+            return enrolledDate;
+        }
+
+        // 오늘 이후 가장 가까운 미래 날짜 계산
+        long nextCycle = (daysSinceEnrolled / choreFrequency + 1) * choreFrequency;
+        return enrolledDate.plusDays(nextCycle);
+    }
+
+    public List<Chore> filterSoonChores(List<Chore> chores, int choreDays) {
+        LocalDate today = LocalDate.now();
+        LocalDate maxDate = today.plusDays(choreDays);
+
+        return chores.stream()
+                .filter(chore -> {
+                    LocalDate closestFutureDate = calculateClosestChoreDate(chore.getEnrolledDate(), chore.getChoreFrequency());
+                    return closestFutureDate != null
+                            && !closestFutureDate.isBefore(today)
+                            && !closestFutureDate.isAfter(maxDate);
+                })
+                .sorted(Comparator.comparing(chore -> calculateClosestChoreDate(chore.getEnrolledDate(), chore.getChoreFrequency())))
+                .collect(Collectors.toList());
     }
 }

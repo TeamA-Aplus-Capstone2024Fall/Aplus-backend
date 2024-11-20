@@ -10,4 +10,6 @@ public interface ChoreRepository {
     Chore findById(Long choreId);
     void delete(Long choreId);
     List<Chore> findAll(Room room);
+
+    List<Chore> getSoonChores(Long roomId, Integer choreDays, Long memberId);
 }

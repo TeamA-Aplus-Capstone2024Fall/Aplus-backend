@@ -21,6 +21,7 @@ public class EventDto {
     private String eventName;  // 이벤트명
     private LocalDate eventDay;   // 이벤트 날짜
     private LocalTime eventTime;  // 이벤트 시간
+    private String description; // 이벤트 설명
 
     private List<MemberDto> members = new ArrayList<>();
 
@@ -39,6 +40,7 @@ public class EventDto {
                 .eventDay(event.getEventDay())
                 .eventTime(event.getEventTime())
                 .members(memberDtos)
+                .description(event.getDescription())
                 .build();
     }
 }
