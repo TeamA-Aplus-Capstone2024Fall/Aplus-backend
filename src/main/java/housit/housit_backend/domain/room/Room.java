@@ -24,7 +24,7 @@ public class Room {
     private String roomPassword;
 
     @Getter
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String roomName;
 
     private Long masterMemberId;

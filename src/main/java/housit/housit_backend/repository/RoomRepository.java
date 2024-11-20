@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface RoomRepository{
     Room saveRoom(Room room);
     Optional<Room> findRoomById(Long roomId);
+    Room findRoomByRoomName(String roomName);
     void deleteRoom(Long roomId);
 
     List<Room> findAllRooms(Pageable pageable);

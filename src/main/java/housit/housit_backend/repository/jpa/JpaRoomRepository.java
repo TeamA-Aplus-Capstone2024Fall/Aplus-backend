@@ -30,6 +30,13 @@ public class JpaRoomRepository implements RoomRepository {
     }
 
     @Override
+    public Room findRoomByRoomName(String roomName) {
+        return em.createQuery("SELECT r FROM Room r WHERE r.roomName = :roomName", Room.class)
+                .setParameter("roomName", roomName)
+                .getSingleResult();
+    }
+
+    @Override
     public void deleteRoom(Long roomId) {
         Optional<Room> room = findRoomById(roomId);
         room.ifPresent(em::remove);

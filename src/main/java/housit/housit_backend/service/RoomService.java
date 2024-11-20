@@ -35,6 +35,10 @@ public class RoomService {
 
     @Transactional
     public RoomCreateResponseDto createRoom(RoomSaveDto roomSaveDto) {
+        if(roomRepository.findRoomByRoomName(roomSaveDto.getRoomName()) != null) {
+            throw new IllegalArgumentException("Room already exists");
+        }
+
         Room createdRoom = roomSaveDto.toRoomEntity();
         roomRepository.saveRoom(createdRoom);
 
