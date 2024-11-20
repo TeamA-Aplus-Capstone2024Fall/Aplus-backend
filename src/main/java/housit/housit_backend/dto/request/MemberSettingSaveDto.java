@@ -6,7 +6,7 @@ import lombok.Getter;
 public class MemberSettingSaveDto {
     private Integer foodDays;
     private Integer financeDays;
-    //private Integer choreDays;
+    private Integer choreDays;
     private Integer eventDays;
     private Integer minimumFoodQuantity;
 }

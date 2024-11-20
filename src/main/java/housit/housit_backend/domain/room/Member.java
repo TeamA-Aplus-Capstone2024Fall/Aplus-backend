@@ -40,7 +40,7 @@ public class Member {
 
     private Integer foodDays;
     private Integer financeDays;
-    //private Integer choreDays;
+    private Integer choreDays;
     private Integer eventDays;
     private Integer minimumFoodQuantity;
 
@@ -57,7 +57,7 @@ public class Member {
                 .foodDays(7)
                 .financeDays(7)
                 .hasPassword(!Objects.equals(memberSaveDto.getMemberPassword(), ""))
-                //.choreDays(7)
+                .choreDays(7)
                 .eventDays(7)
                 .minimumFoodQuantity(1)
                 .build();
@@ -73,7 +73,7 @@ public class Member {
     public void updateMemberSetting(MemberSettingSaveDto memberSettingSaveDto) {
         this.foodDays = memberSettingSaveDto.getFoodDays();
         this.financeDays = memberSettingSaveDto.getFinanceDays();
-        //this.choreDays = memberSettingSaveDto.getChoreDays();
+        this.choreDays = memberSettingSaveDto.getChoreDays();
         this.eventDays = memberSettingSaveDto.getEventDays();
         this.minimumFoodQuantity = memberSettingSaveDto.getMinimumFoodQuantity();
     }

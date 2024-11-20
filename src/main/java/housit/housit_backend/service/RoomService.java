@@ -125,13 +125,13 @@ public class RoomService {
     public HomeDto getHome(Long roomId, Long memberId) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
-        Member member = memberRepository.findMemberById(memberId); // 일단 임시로 1번째 멤버로 설정
-        List<Food> expiringSoonFoods = foodRepository.getExpiringSoonFoods(roomId, 7); // 임시로 7일로 설정
-        List<Food> outOfFavoriteFoods = foodRepository.getOutOfFavoriteFoods(roomId, 5); // 임시로 5개로 설정
-        List<PredictedIncome> predictedIncomes = financeRepository.findSoonPredictedIncomes(room, 7); // 임시로 7일로 설정
-        List<PredictedExpense> predictedExpenses = financeRepository.findSoonPredictedExpenses(room, 7); // 임시로 7일로 설정
-        List<SavingGoal> savingGoals = financeRepository.findSoonSavingGoals(room, 7); // 임시로 7일로 설정
-        List<Event> events = eventRepository.getSoonEvents(roomId, 7); // 임시로 7일로 설정
+        Member member = memberRepository.findMemberById(memberId);
+        List<Food> expiringSoonFoods = foodRepository.getExpiringSoonFoods(roomId, member.getFoodDays());
+        List<Food> outOfFavoriteFoods = foodRepository.getOutOfFavoriteFoods(roomId, member.getMinimumFoodQuantity());
+        List<PredictedIncome> predictedIncomes = financeRepository.findSoonPredictedIncomes(room, member.getFinanceDays());
+        List<PredictedExpense> predictedExpenses = financeRepository.findSoonPredictedExpenses(room, member.getFinanceDays());
+        List<SavingGoal> savingGoals = financeRepository.findSoonSavingGoals(room, member.getFinanceDays());
+        List<Event> events = eventRepository.getSoonEvents(roomId, member.getEventDays());
 
         // expiringSoonFoods를 expiringSoonFoodsDto로 변환
         // outOfFavoriteFoods를 outOfFavoriteFoodsDto로 변환
