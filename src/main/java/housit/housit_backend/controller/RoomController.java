@@ -63,7 +63,7 @@ public class RoomController {
 
     // Room 토큰 필요, Member 토큰 필요
     @GetMapping("/room/{roomId}/home")
-    public HomeDto getHome(@PathVariable("roomId") Long roomId) {
-        return roomService.getHome(roomId);
+    public HomeDto getHome(@PathVariable("roomId") Long roomId, @RequestParam Long memberId) {
+        return roomService.getHome(roomId, memberId);
     }
 }

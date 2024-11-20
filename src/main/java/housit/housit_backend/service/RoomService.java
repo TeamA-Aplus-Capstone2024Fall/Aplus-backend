@@ -9,6 +9,7 @@ import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.domain.room.Room;
 import housit.housit_backend.dto.reponse.*;
 import housit.housit_backend.dto.request.MemberSaveDto;
+import housit.housit_backend.dto.request.MemberSettingSaveDto;
 import housit.housit_backend.dto.request.RoomSaveDto;
 import housit.housit_backend.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -121,10 +122,10 @@ public class RoomService {
         return null;
     }
 
-    public HomeDto getHome(Long roomId) {
+    public HomeDto getHome(Long roomId, Long memberId) {
         Room room = roomRepository.findRoomById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
-        Member member = memberRepository.findMemberById(1L); // 일단 임시로 1번째 멤버로 설정
+        Member member = memberRepository.findMemberById(memberId); // 일단 임시로 1번째 멤버로 설정
         List<Food> expiringSoonFoods = foodRepository.getExpiringSoonFoods(roomId, 7); // 임시로 7일로 설정
         List<Food> outOfFavoriteFoods = foodRepository.getOutOfFavoriteFoods(roomId, 5); // 임시로 5개로 설정
         List<PredictedIncome> predictedIncomes = financeRepository.findSoonPredictedIncomes(room, 7); // 임시로 7일로 설정
@@ -152,5 +153,15 @@ public class RoomService {
         Room room = roomRepository.findRoomByRoomName(roomName);
         if (room == null) return null;
         return room.getRoomId();
+    }
+
+    public MemberDto updateMemberSetting(Long memberId, MemberSettingSaveDto memberSettingSaveDto) {
+        Member member = memberRepository.findMemberById(memberId);
+        if(member != null){
+            member.updateMemberSetting(memberSettingSaveDto);
+            memberRepository.saveMember(member);
+            return MemberDto.entityToDto(member);
+        }
+        return null;
     }
 }

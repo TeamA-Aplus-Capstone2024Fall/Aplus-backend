@@ -3,6 +3,7 @@ package housit.housit_backend.controller;
 import housit.housit_backend.dto.reponse.MemberDto;
 import housit.housit_backend.dto.request.MemberSaveDto;
 import housit.housit_backend.dto.request.MemberDeleteDto;
+import housit.housit_backend.dto.request.MemberSettingSaveDto;
 import housit.housit_backend.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -63,10 +64,19 @@ public class MemberController {
         return roomService.updateMember(memberId, memberSaveDto);
     }
 
+    @PutMapping("/room/{roomId}/member/{memberId}/settings")
+    public MemberDto updateMemberSetting(@PathVariable("roomId") Long roomId,
+                                  @PathVariable("memberId") Long memberId,
+                                  @RequestBody MemberSettingSaveDto memberSettingSaveDto) {
+        return roomService.updateMemberSetting(memberId, memberSettingSaveDto);
+    }
+
     // Room 토큰 필요, Member 토큰 발급
     @GetMapping("/room/{roomId}/member/{memberId}/login")
     public void joinRoom(@PathVariable("roomId") Long roomId,
                          @PathVariable("memberId") Long memberId) {
 
     }
+
+
 }
