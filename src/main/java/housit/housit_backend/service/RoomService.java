@@ -166,7 +166,6 @@ public class RoomService {
         Member member = memberRepository.findMemberById(memberId);
         if(member != null){
             member.updateMemberSetting(memberSettingSaveDto);
-            memberRepository.saveMember(member);
             return MemberDto.entityToDto(member);
         }
         return null;

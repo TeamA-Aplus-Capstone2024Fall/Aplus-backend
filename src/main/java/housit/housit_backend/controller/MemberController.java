@@ -64,6 +64,7 @@ public class MemberController {
         return roomService.updateMember(memberId, memberSaveDto);
     }
 
+    // 멤버 세팅 변경
     @PutMapping("/room/{roomId}/member/{memberId}/settings")
     public MemberDto updateMemberSetting(@PathVariable("roomId") Long roomId,
                                   @PathVariable("memberId") Long memberId,
