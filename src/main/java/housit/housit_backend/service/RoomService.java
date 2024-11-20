@@ -147,4 +147,10 @@ public class RoomService {
                 new ArrayList<>(), // 임시로 비워둠
                 eventDtos);
     }
+
+    public Long getRoomId(String roomName) {
+        Room room = roomRepository.findRoomByRoomName(roomName);
+        if (room == null) return null;
+        return room.getRoomId();
+    }
 }

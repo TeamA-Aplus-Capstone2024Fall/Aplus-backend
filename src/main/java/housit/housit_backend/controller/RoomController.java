@@ -28,6 +28,11 @@ public class RoomController {
         return roomService.getRoomsWithMembers(pageable);
     }
 
+    @GetMapping("/room/roomId")
+    public Long getRoomId(@RequestParam("roomName") String roomName) {
+        return roomService.getRoomId(roomName);
+    }
+
     // 토큰 X
     @PostMapping("/room")
     public ResponseEntity<?> createRoom(@RequestBody RoomSaveDto roomSaveDto) {
