@@ -30,8 +30,16 @@ public class RoomController {
 
     // 토큰 X
     @PostMapping("/room")
-    public RoomCreateResponseDto createRoom(@RequestBody RoomSaveDto roomSaveDto) {
-        return roomService.createRoom(roomSaveDto);
+    public ResponseEntity<?> createRoom(@RequestBody RoomSaveDto roomSaveDto) {
+        RoomCreateResponseDto response = roomService.createRoom(roomSaveDto);
+
+        if (response == null) {
+            // 이미 리소스가 존재할 경우 409 Conflict 반환
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Room already exists");
+        }
+
+        // 성공 시 201 Created와 함께 응답 반환
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // roomPassword 필요

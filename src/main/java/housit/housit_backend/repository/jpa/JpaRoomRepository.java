@@ -2,6 +2,7 @@ package housit.housit_backend.repository.jpa;
 
 import housit.housit_backend.domain.room.Member;
 import housit.housit_backend.domain.room.Room;
+import jakarta.persistence.NoResultException;
 import org.springframework.data.domain.Pageable;
 import housit.housit_backend.repository.RoomRepository;
 import jakarta.persistence.EntityManager;
@@ -31,9 +32,13 @@ public class JpaRoomRepository implements RoomRepository {
 
     @Override
     public Room findRoomByRoomName(String roomName) {
-        return em.createQuery("SELECT r FROM Room r WHERE r.roomName = :roomName", Room.class)
-                .setParameter("roomName", roomName)
-                .getSingleResult();
+        try {
+            return em.createQuery("SELECT r FROM Room r WHERE r.roomName = :roomName", Room.class)
+                    .setParameter("roomName", roomName)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null; // 결과가 없을 경우 null 반환
+        }
     }
 
     @Override
