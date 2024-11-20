@@ -19,9 +19,10 @@ public class MemberController {
     private final RoomService roomService;
 
     // roomPassword 필요
-    @GetMapping("/room/{roomId}/member")
+    @PostMapping("/room/{roomId}/join")
     public ResponseEntity<List<MemberDto>> enterRoom(@PathVariable("roomId") Long roomId,
-                                                     @RequestParam("roomPassword") String roomPassword) {
+                                                     @RequestBody Map<String, Object> data) {
+        String roomPassword = (String) data.get("roomPassword");
         // 방 비밀번호 검증 실패 시 403 응답 반환
         if(!roomService.validateRoomPassword(roomId, roomPassword)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
