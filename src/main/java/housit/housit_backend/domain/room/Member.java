@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -55,6 +56,7 @@ public class Member {
                 .room(room)
                 .foodDays(7)
                 .financeDays(7)
+                .hasPassword(!Objects.equals(memberSaveDto.getMemberPassword(), ""))
                 //.choreDays(7)
                 .eventDays(7)
                 .minimumFoodQuantity(1)
@@ -65,6 +67,7 @@ public class Member {
         this.memberName = memberName;
         this.memberPassword = memberPassword;
         this.memberIcon = memberIcon;
+        this.hasPassword = !Objects.equals(memberPassword, "");
     }
 
     public void updateMemberSetting(MemberSettingSaveDto memberSettingSaveDto) {
