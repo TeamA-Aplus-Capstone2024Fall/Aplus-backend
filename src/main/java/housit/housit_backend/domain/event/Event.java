@@ -24,6 +24,7 @@ public class Event {
 
     @Column(nullable = false)
     private String eventName;  // 이벤트명
+    private String description; // 이벤트 설명
 
     private LocalDate eventDay;   // 이벤트 날짜
     private LocalTime eventTime;  // 이벤트 시간
@@ -44,6 +45,7 @@ public class Event {
         event.eventTime = eventSaveDto.getEventTime();
         event.room = room;
         event.eventMembers = eventMembers;
+        event.description = eventSaveDto.getDescription();
         for (EventMember eventMember : eventMembers) {
             eventMember.createEvent(event);
         }
@@ -54,7 +56,7 @@ public class Event {
         this.eventName = eventSaveDto.getEventName();
         this.eventDay = eventSaveDto.getEventDay();
         this.eventTime = eventSaveDto.getEventTime();
-
+        this.description = eventSaveDto.getDescription();
         // 기존 리스트 clear
         this.eventMembers.clear();
         // 새로운 멤버들 추가

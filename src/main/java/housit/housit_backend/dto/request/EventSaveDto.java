@@ -16,6 +16,7 @@ public class EventSaveDto {
     private LocalDate eventDay;   // 이벤트 날짜
     private LocalTime eventTime;  // 이벤트 시간
     private List<Long> memberIds = new ArrayList<>();
+    private String description; // 이벤트 설명
 
     public Event toEventEntity(Room room, List<EventMember> eventMembers) {
         return Event.builder()
