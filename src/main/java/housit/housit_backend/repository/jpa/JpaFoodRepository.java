@@ -61,6 +61,7 @@ public class JpaFoodRepository implements FoodRepository {
     
     @Override
     public List<Food> getOutOfFavoriteFoods(Long roomId, Integer minimumQuantity) {
+        System.out.println("minimumQuantity = " + minimumQuantity);
         return em.createQuery("SELECT f FROM Food f WHERE f.room.id = :roomId AND f.isFavorite = true AND f.quantity <= :minimumQuantity", Food.class)
                 .setParameter("roomId", roomId)
                 .setParameter("minimumQuantity", minimumQuantity)

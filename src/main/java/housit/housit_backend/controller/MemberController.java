@@ -78,6 +78,4 @@ public class MemberController {
                          @PathVariable("memberId") Long memberId) {
 
     }
-
-
 }

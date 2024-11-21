@@ -28,8 +28,10 @@ public class RoomController {
         return roomService.getRoomsWithMembers(pageable);
     }
 
-    @GetMapping("/room/roomId")
-    public Long getRoomId(@RequestParam("roomName") String roomName) {
+    @PostMapping("/room/roomId")
+    public Long getRoomId(@RequestBody Map<String, String> requestBody) {
+        String roomName = requestBody.get("roomName");
+
         return roomService.getRoomId(roomName);
     }
 
