@@ -32,7 +32,7 @@ public class AccountTxn {
     private Long fromTxnId; // 채워져있으면 해당 AccountTxn 에서 transfer
     private Long toTxnId; // 채워져있으면 해당 AccountTxn 로 transfer
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accountId", nullable = false)
     private Account account;
