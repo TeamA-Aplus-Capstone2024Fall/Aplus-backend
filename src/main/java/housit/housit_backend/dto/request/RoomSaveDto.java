@@ -25,6 +25,7 @@ public class RoomSaveDto {
         return Member.builder()
                 .memberName(masterMemberName)
                 .memberPassword(masterMemberPassword)
+                .hasPassword(!masterMemberPassword.isEmpty())
                 .foodDays(7)
                 .financeDays(7)
                 .choreDays(7)
