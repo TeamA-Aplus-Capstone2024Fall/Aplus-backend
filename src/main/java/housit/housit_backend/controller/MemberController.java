@@ -34,6 +34,25 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
 
+    @PostMapping("/room/{roomId}/member/{memberId}/join")
+    public ResponseEntity<Boolean> memberLogin(@PathVariable("roomId") Long roomId,
+                                               @PathVariable("memberId") Long memberId,
+                                               @RequestBody Map<String, Object> data) {
+        String memberPassword = (String) data.get("memberPassword");
+
+        // 비밀번호 검증
+        Boolean isValidPassword = roomService.validateMemberPassword(memberId, memberPassword);
+
+        // 로그인 실패시 401 Unauthorized
+        if (!isValidPassword) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(false); // 실패를 나타내는 Boolean 값 반환
+        }
+
+        // 로그인 성공시 true 반환
+        return ResponseEntity.ok(true);
+    }
+
     // Room 토큰 필요
     @PostMapping("/room/{roomId}/member")
     public MemberDto createMember(@PathVariable("roomId") Long roomId,
