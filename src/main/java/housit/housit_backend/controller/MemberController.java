@@ -55,9 +55,14 @@ public class MemberController {
 
     // Room 토큰 필요
     @PostMapping("/room/{roomId}/member")
-    public MemberDto createMember(@PathVariable("roomId") Long roomId,
-                                  @RequestBody MemberSaveDto memberSaveDto) {
-        return roomService.createMember(roomId, memberSaveDto);
+    public ResponseEntity<?> createMember(@PathVariable("roomId") Long roomId,
+                                                  @RequestBody MemberSaveDto memberSaveDto) {
+        String validMemberSaveDto = isValidMemberSaveDto(memberSaveDto);
+        if (validMemberSaveDto != null) {
+            return ResponseEntity.badRequest().body(validMemberSaveDto); // 400 Bad Request 반환
+        }
+        MemberDto createdMember = roomService.createMember(roomId, memberSaveDto);
+        return ResponseEntity.ok(createdMember); // 성공 시 200 OK와 함께 결과 반환
     }
 
     // Room 토큰 필요, memberPassword 필요
@@ -77,10 +82,14 @@ public class MemberController {
 
     // Room 토큰 필요, memberPassword 필요
     @PutMapping("/room/{roomId}/member/{memberId}")
-    public MemberDto updateMember(@PathVariable("roomId") Long roomId,
+    public ResponseEntity<?> updateMember(@PathVariable("roomId") Long roomId,
                                   @PathVariable("memberId") Long memberId,
                                   @RequestBody MemberSaveDto memberSaveDto) {
-        return roomService.updateMember(memberId, memberSaveDto);
+        String validMemberSaveDto = isValidMemberSaveDto(memberSaveDto);
+        if (validMemberSaveDto != null) {
+            return ResponseEntity.badRequest().body(validMemberSaveDto); // 400 Bad Request 반환
+        }
+        return ResponseEntity.ok(roomService.updateMember(memberId, memberSaveDto));
     }
 
     // 멤버 세팅 변경
@@ -96,5 +105,15 @@ public class MemberController {
     public void joinRoom(@PathVariable("roomId") Long roomId,
                          @PathVariable("memberId") Long memberId) {
 
+    }
+
+    private String isValidMemberSaveDto(MemberSaveDto memberSaveDto) {
+        if (memberSaveDto.getMemberName() == null || memberSaveDto.getMemberName().isEmpty()) return "MemberName is empty";
+        if (memberSaveDto.getMemberName().length() < 2 || memberSaveDto.getMemberName().length() > 30) return "MemberName length is invalid";
+        String memberPassword = memberSaveDto.getMemberPassword();
+        if (memberPassword == null || memberPassword.isEmpty()) return null;
+        if (!memberPassword.matches("\\d{4}")) return "MemberPassword is invalid";
+
+        return null;
     }
 }
