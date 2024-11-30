@@ -10,6 +10,7 @@ import housit.housit_backend.dto.request.FinancePlanSaveDto;
 import housit.housit_backend.service.FinanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,18 +60,27 @@ public class FinanceController {
 
     // Txn 생성
     @PostMapping("/room/{roomId}/finance/{accountId}/accountTxn")
-    public Long createTxn(@PathVariable Long roomId,
+    public ResponseEntity<?> createTxn(@PathVariable Long roomId,
                           @PathVariable Long accountId,
                           @RequestBody AccountTxnSaveDto accountTxnSaveDto) {
-        return financeService.createTxn(roomId, accountId, accountTxnSaveDto);
+        String validAccountTxnSaveDto = isValidAccountTxnSaveDto(accountTxnSaveDto);
+        if (validAccountTxnSaveDto != null) {
+            return ResponseEntity.badRequest().body(validAccountTxnSaveDto);
+        }
+        return ResponseEntity.ok(financeService.createTxn(roomId, accountId, accountTxnSaveDto));
     }
 
     // Txn 수정
     @PutMapping("/room/{roomId}/finance/accountTxn/{accountTxnId}")
-    public void updateTxn(@PathVariable Long roomId,
+    public ResponseEntity<?> updateTxn(@PathVariable Long roomId,
                           @PathVariable Long accountTxnId,
                           @RequestBody AccountTxnSaveDto accountTxnSaveDto) {
+        String validAccountTxnSaveDto = isValidAccountTxnSaveDto(accountTxnSaveDto);
+        if (validAccountTxnSaveDto != null) {
+            return ResponseEntity.badRequest().body(validAccountTxnSaveDto);
+        }
         financeService.updateTxn(roomId, accountTxnId, accountTxnSaveDto);
+        return ResponseEntity.ok().build();
     }
 
     // Txn 삭제
@@ -82,21 +92,30 @@ public class FinanceController {
 
     // TransferTxn 생성
     @PostMapping("/room/{roomId}/finance/accountTransferTxn")
-    public Long createTransferTxn(@PathVariable Long roomId,
+    public ResponseEntity<?> createTransferTxn(@PathVariable Long roomId,
                                   @RequestBody AccountTxnSaveDto accountTxnSaveDto,
                                   @RequestParam Long fromAccountId,
                                   @RequestParam Long toAccountId) {
-        return financeService.createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId);
+        String validAccountTxnSaveDto = isValidAccountTxnSaveDto(accountTxnSaveDto);
+        if (validAccountTxnSaveDto != null) {
+            return ResponseEntity.badRequest().body(validAccountTxnSaveDto);
+        }
+        return ResponseEntity.ok(financeService.createTransferTxn(roomId, accountTxnSaveDto, fromAccountId, toAccountId));
     }
 
     // TransferTxn 수정
     @PutMapping("/room/{roomId}/finance/accountTransferTxn/{accountTxnId}")
-    public Long updateTransferTxn(@PathVariable Long roomId,
-                                  @PathVariable Long accountTxnId,
-                                  @RequestBody AccountTxnSaveDto accountTxnSaveDto,
-                                  @RequestParam Long fromAccountId,
-                                  @RequestParam Long toAccountId) {
-        return financeService.updateTransferTxn(roomId, accountTxnId, accountTxnSaveDto, fromAccountId, toAccountId);
+    public ResponseEntity<?> updateTransferTxn(@PathVariable Long roomId,
+                                            @PathVariable Long accountTxnId,
+                                            @RequestBody AccountTxnSaveDto accountTxnSaveDto,
+                                            @RequestParam Long fromAccountId,
+                                            @RequestParam Long toAccountId) {
+        String validAccountTxnSaveDto = isValidAccountTxnSaveDto(accountTxnSaveDto);
+        if (validAccountTxnSaveDto != null) {
+            return ResponseEntity.badRequest().body(validAccountTxnSaveDto);
+        }
+
+        return ResponseEntity.ok(financeService.updateTransferTxn(roomId, accountTxnId, accountTxnSaveDto, fromAccountId, toAccountId));
     }
 
     // TransferTxn 삭제
@@ -186,5 +205,13 @@ public class FinanceController {
     public void deleteSavingGoal(@PathVariable Long roomId,
                                  @PathVariable Long financePlanId) {
         financeService.deleteSavingGoal(financePlanId);
+    }
+
+    private String isValidAccountTxnSaveDto(AccountTxnSaveDto accountTxnSaveDto) {
+        Long amount = accountTxnSaveDto.getAmount();
+        if (amount <= 0) {
+            return "The amount must be greater than 0.";
+        }
+        return null;
     }
 }
