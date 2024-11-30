@@ -29,10 +29,15 @@ public class RoomController {
     }
 
     @PostMapping("/room/roomId")
-    public Long getRoomId(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<Long> getRoomId(@RequestBody Map<String, String> requestBody) {
         String roomName = requestBody.get("roomName");
-
-        return roomService.getRoomId(roomName);
+        Long roomId = roomService.getRoomId(roomName);
+        // roomId 이 null 인 경우 404 Not Found 반환
+        if (roomId == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return ResponseEntity.ok(roomId);
     }
 
     // 토큰 X
