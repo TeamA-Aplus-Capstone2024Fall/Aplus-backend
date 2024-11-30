@@ -143,17 +143,25 @@ public class FinanceController {
 
     // Predicted Income 생성
     @PostMapping("/room/{roomId}/finance/predictedIncome")
-    public Long createPredictedIncome(@PathVariable Long roomId,
+    public ResponseEntity<?> createPredictedIncome(@PathVariable Long roomId,
                                       @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-        return financeService.createPredictedIncome(roomId, financePlanSaveDto);
+        String validFinancePlanSaveDto = isValidFinancePlanSaveDto(financePlanSaveDto);
+        if (validFinancePlanSaveDto != null) {
+            return ResponseEntity.badRequest().body(validFinancePlanSaveDto);
+        }
+        return ResponseEntity.ok(financeService.createPredictedIncome(roomId, financePlanSaveDto));
     }
 
     // Predicted Income 수정
     @PutMapping("/room/{roomId}/finance/predictedIncome/{financePlanId}")
-    public Long updatePredictedIncome(@PathVariable Long roomId,
+    public ResponseEntity<?> updatePredictedIncome(@PathVariable Long roomId,
                                       @PathVariable Long financePlanId,
                                       @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-        return financeService.updatePredictedIncome(financePlanId, financePlanSaveDto);
+        String validFinancePlanSaveDto = isValidFinancePlanSaveDto(financePlanSaveDto);
+        if (validFinancePlanSaveDto != null) {
+            return ResponseEntity.badRequest().body(validFinancePlanSaveDto);
+        }
+        return ResponseEntity.ok(financeService.updatePredictedIncome(financePlanId, financePlanSaveDto));
     }
 
     // Predicted Income 삭제
@@ -165,17 +173,27 @@ public class FinanceController {
 
     // Predicted Expense 생성
     @PostMapping("/room/{roomId}/finance/predictedExpense")
-    public Long createPredictedExpense(@PathVariable Long roomId,
+    public ResponseEntity<?> createPredictedExpense(@PathVariable Long roomId,
                                        @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-        return financeService.createPredictedExpense(roomId, financePlanSaveDto);
+        String validFinancePlanSaveDto = isValidFinancePlanSaveDto(financePlanSaveDto);
+        if (validFinancePlanSaveDto != null) {
+            return ResponseEntity.badRequest().body(validFinancePlanSaveDto);
+        }
+
+        return ResponseEntity.ok(financeService.createPredictedExpense(roomId, financePlanSaveDto));
     }
 
     // Predicted Expense 수정
     @PutMapping("/room/{roomId}/finance/predictedExpense/{financePlanId}")
-    public Long updatePredictedExpense(@PathVariable Long roomId,
+    public ResponseEntity<?> updatePredictedExpense(@PathVariable Long roomId,
                                       @PathVariable Long financePlanId,
                                       @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-        return financeService.updatePredictedExpense(financePlanId, financePlanSaveDto);
+        String validFinancePlanSaveDto = isValidFinancePlanSaveDto(financePlanSaveDto);
+        if (validFinancePlanSaveDto != null) {
+            return ResponseEntity.badRequest().body(validFinancePlanSaveDto);
+        }
+
+        return ResponseEntity.ok(financeService.updatePredictedExpense(financePlanId, financePlanSaveDto));
     }
 
     // Predicted Expense 삭제
@@ -187,17 +205,25 @@ public class FinanceController {
 
     // Saving Goal 생성
     @PostMapping("/room/{roomId}/finance/savingGoal")
-    public Long createSavingGoal(@PathVariable Long roomId,
+    public ResponseEntity<?> createSavingGoal(@PathVariable Long roomId,
                                  @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-        return financeService.createSavingGoal(roomId, financePlanSaveDto);
+        String validFinancePlanSaveDto = isValidFinancePlanSaveDto(financePlanSaveDto);
+        if (validFinancePlanSaveDto != null) {
+            return ResponseEntity.badRequest().body(validFinancePlanSaveDto);
+        }
+        return ResponseEntity.ok(financeService.createSavingGoal(roomId, financePlanSaveDto));
     }
 
     // Saving Goal 수정
     @PutMapping("/room/{roomId}/finance/savingGoal/{financePlanId}")
-    public Long updateSavingGoal(@PathVariable Long roomId,
+    public ResponseEntity<?> updateSavingGoal(@PathVariable Long roomId,
                                  @PathVariable Long financePlanId,
                                  @RequestBody FinancePlanSaveDto financePlanSaveDto) {
-        return financeService.updateSavingGoal(financePlanId, financePlanSaveDto);
+        String validFinancePlanSaveDto = isValidFinancePlanSaveDto(financePlanSaveDto);
+        if (validFinancePlanSaveDto != null) {
+            return ResponseEntity.badRequest().body(validFinancePlanSaveDto);
+        }
+        return ResponseEntity.ok(financeService.updateSavingGoal(financePlanId, financePlanSaveDto));
     }
 
     // Saving Goal 삭제
@@ -209,6 +235,14 @@ public class FinanceController {
 
     private String isValidAccountTxnSaveDto(AccountTxnSaveDto accountTxnSaveDto) {
         Long amount = accountTxnSaveDto.getAmount();
+        if (amount <= 0) {
+            return "The amount must be greater than 0.";
+        }
+        return null;
+    }
+
+    private String isValidFinancePlanSaveDto(FinancePlanSaveDto financePlanSaveDto) {
+        Long amount = financePlanSaveDto.getAmount();
         if (amount <= 0) {
             return "The amount must be greater than 0.";
         }
