@@ -122,11 +122,11 @@ public class MemberController {
     }
 
     private String isValidMemberSettingSaveDto(MemberSettingSaveDto memberSettingSaveDto) {
-        if (memberSettingSaveDto.getFoodDays() < 0) return "FoodDays is invalid";
-        if (memberSettingSaveDto.getFinanceDays() < 0) return "FinanceDays is invalid";
-        if (memberSettingSaveDto.getChoreDays() < 0) return "ChoreDays is invalid";
-        if (memberSettingSaveDto.getEventDays() < 0) return "EventDays is invalid";
-        if (memberSettingSaveDto.getMinimumFoodQuantity() < 0) return "MinimumFoodQuantity is invalid";
+        if (memberSettingSaveDto.getFoodDays() <= 0) return "FoodDays is invalid";
+        if (memberSettingSaveDto.getFinanceDays() <= 0) return "FinanceDays is invalid";
+        if (memberSettingSaveDto.getChoreDays() <= 0) return "ChoreDays is invalid";
+        if (memberSettingSaveDto.getEventDays() <= 0) return "EventDays is invalid";
+        if (memberSettingSaveDto.getMinimumFoodQuantity() <= 0) return "MinimumFoodQuantity is invalid";
 
         return null;
     }
