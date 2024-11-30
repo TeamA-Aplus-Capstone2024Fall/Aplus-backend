@@ -94,10 +94,14 @@ public class MemberController {
 
     // 멤버 세팅 변경
     @PutMapping("/room/{roomId}/member/{memberId}/settings")
-    public MemberDto updateMemberSetting(@PathVariable("roomId") Long roomId,
+    public ResponseEntity<?> updateMemberSetting(@PathVariable("roomId") Long roomId,
                                   @PathVariable("memberId") Long memberId,
                                   @RequestBody MemberSettingSaveDto memberSettingSaveDto) {
-        return roomService.updateMemberSetting(memberId, memberSettingSaveDto);
+        String validMemberSettingSaveDto = isValidMemberSettingSaveDto(memberSettingSaveDto);
+        if (validMemberSettingSaveDto != null) {
+            return ResponseEntity.badRequest().body(validMemberSettingSaveDto); // 400 Bad Request 반환
+        }
+        return ResponseEntity.ok(roomService.updateMemberSetting(memberId, memberSettingSaveDto));
     }
 
     // Room 토큰 필요, Member 토큰 발급
@@ -113,6 +117,16 @@ public class MemberController {
         String memberPassword = memberSaveDto.getMemberPassword();
         if (memberPassword == null || memberPassword.isEmpty()) return null;
         if (!memberPassword.matches("\\d{4}")) return "MemberPassword is invalid";
+
+        return null;
+    }
+
+    private String isValidMemberSettingSaveDto(MemberSettingSaveDto memberSettingSaveDto) {
+        if (memberSettingSaveDto.getFoodDays() < 0) return "FoodDays is invalid";
+        if (memberSettingSaveDto.getFinanceDays() < 0) return "FinanceDays is invalid";
+        if (memberSettingSaveDto.getChoreDays() < 0) return "ChoreDays is invalid";
+        if (memberSettingSaveDto.getEventDays() < 0) return "EventDays is invalid";
+        if (memberSettingSaveDto.getMinimumFoodQuantity() < 0) return "MinimumFoodQuantity is invalid";
 
         return null;
     }
