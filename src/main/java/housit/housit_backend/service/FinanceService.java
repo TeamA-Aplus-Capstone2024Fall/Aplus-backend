@@ -233,4 +233,14 @@ public class FinanceService {
         SavingGoal savingGoal = financeRepository.findSavingGoalById(financePlanId);
         financeRepository.deleteFinancePlan(savingGoal);
     }
+
+    @Transactional
+    public void deleteTransferTxn(Long accountTxnId) {
+        AccountTxn originTransferTxn = financeRepository.findTxnById(accountTxnId);
+        if(originTransferTxn.getTxnType() != TxnType.TRANSFER)
+            throw new IllegalArgumentException("Transaction type must be TRANSFER");
+        if(originTransferTxn.getFromTxnId() != null) deleteTxn(originTransferTxn.getFromTxnId());
+        if(originTransferTxn.getToTxnId() != null) deleteTxn(originTransferTxn.getToTxnId());
+        deleteTxn(accountTxnId);
+    }
 }

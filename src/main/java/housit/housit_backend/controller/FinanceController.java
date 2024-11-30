@@ -100,11 +100,11 @@ public class FinanceController {
     }
 
     // TransferTxn 삭제
-//    @DeleteMapping("/room/{roomId}/finance/accountTransferTxn/{accountTxnId}")
-//    public void deleteTransferTxn(@PathVariable Long roomId,
-//                                  @PathVariable Long accountTxnId) {
-//        financeService.deleteTransferTxn(accountTxnId);
-//    }
+    @DeleteMapping("/room/{roomId}/finance/accountTransferTxn/{accountTxnId}")
+    public void deleteTransferTxn(@PathVariable Long roomId,
+                                  @PathVariable Long accountTxnId) {
+        financeService.deleteTransferTxn(accountTxnId);
+    }
 
     // Income 로그 불러오기
     @GetMapping("/room/{roomId}/finance/income")
